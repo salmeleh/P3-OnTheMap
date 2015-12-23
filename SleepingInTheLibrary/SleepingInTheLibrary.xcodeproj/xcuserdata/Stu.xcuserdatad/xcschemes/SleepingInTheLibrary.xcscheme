@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A9ECF5FC1A76CF43009A8F77"
-               BuildableName = "FlickFinder.app"
-               BlueprintName = "FlickFinder"
-               ReferencedContainer = "container:FlickFinder.xcodeproj">
+               BuildableName = "SleepingInTheLibrary.app"
+               BlueprintName = "SleepingInTheLibrary"
+               ReferencedContainer = "container:SleepingInTheLibrary.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A9ECF5FC1A76CF43009A8F77"
-            BuildableName = "FlickFinder.app"
-            BlueprintName = "FlickFinder"
-            ReferencedContainer = "container:FlickFinder.xcodeproj">
+            BuildableName = "SleepingInTheLibrary.app"
+            BlueprintName = "SleepingInTheLibrary"
+            ReferencedContainer = "container:SleepingInTheLibrary.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A9ECF5FC1A76CF43009A8F77"
-            BuildableName = "FlickFinder.app"
-            BlueprintName = "FlickFinder"
-            ReferencedContainer = "container:FlickFinder.xcodeproj">
+            BuildableName = "SleepingInTheLibrary.app"
+            BlueprintName = "SleepingInTheLibrary"
+            ReferencedContainer = "container:SleepingInTheLibrary.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A9ECF5FC1A76CF43009A8F77"
-            BuildableName = "FlickFinder.app"
-            BlueprintName = "FlickFinder"
-            ReferencedContainer = "container:FlickFinder.xcodeproj">
+            BuildableName = "SleepingInTheLibrary.app"
+            BlueprintName = "SleepingInTheLibrary"
+            ReferencedContainer = "container:SleepingInTheLibrary.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

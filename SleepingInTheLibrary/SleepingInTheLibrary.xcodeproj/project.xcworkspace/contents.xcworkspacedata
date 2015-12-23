@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:FlickFinder.xcodeproj">
+      location = "self:SleepingInTheLibrary.xcodeproj">
    </FileRef>
 </Workspace>

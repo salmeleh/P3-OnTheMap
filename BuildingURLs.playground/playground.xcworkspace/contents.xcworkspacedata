@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:FlickFinder.xcodeproj">
+      location = "group:../../Documents/Work/iOS Nanodegree/playgrounds/BuildingURLs.playground">
    </FileRef>
 </Workspace>
