@@ -8,8 +8,9 @@
 
 import UIKit
 
-/* 1 - Define constants */
-let BASE_URL: String = "https://api.flickr.com/services/rest/"
+// MARK: - Globals
+
+let BASE_URL = "https://api.flickr.com/services/rest/"
 let METHOD_NAME = "flickr.photos.search"
 let API_KEY = "981c84261b3ba500d2aa1e5dc3bec9a3"
 let EXTRAS = "url_m"
@@ -20,7 +21,7 @@ let NO_JSON_CALLBACK = "1"
 // MARK: - ViewController: UIViewController
 
 class ViewController: UIViewController {
-
+    
     // MARK: Properties
     
     @IBOutlet weak var photoImageView: UIImageView!
@@ -29,10 +30,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var phraseTextField: UITextField!
     @IBOutlet weak var latitudeTextField: UITextField!
     @IBOutlet weak var longitudeTextField: UITextField!
-
+    
     @IBAction func searchPhotosByPhraseButtonTouchUp(sender: AnyObject) {
         /* 1 - Hardcode the arguments */
-        let methodArguments = [
+        let methodArguments: [String: String!] = [
             "method": METHOD_NAME,
             "api_key": API_KEY,
             "text": "baby asian elephant",
@@ -41,7 +42,6 @@ class ViewController: UIViewController {
             "format": DATA_FORMAT,
             "nojsoncallback": NO_JSON_CALLBACK
         ]
-        
         /* 2 - Call the Flickr API with these arguments */
         getImageFromFlickrBySearch(methodArguments)
     }
@@ -50,36 +50,97 @@ class ViewController: UIViewController {
         print("Will implement this function in a later step...")
     }
     
+    // MARK: Flickr API
     
-    
-    
-    func getImageFromFlickrBySearch(methodArguments: [String: AnyObject]) {
-        /* 3 - get the shared NSURLSession to facilitate networking activity */
+    func getImageFromFlickrBySearch(methodArguments: [String : AnyObject]) {
+        
+        /* 3 - Get the shared NSURLSession to faciliate network activity */
         let session = NSURLSession.sharedSession()
         
-        /* 4 - ceate NSURLRequest using escaped URL */
+        /* 4 - Create the NSURLRequest using properly escaped URL */
         let urlString = BASE_URL + escapedParameters(methodArguments)
         let url = NSURL(string: urlString)!
         let request = NSURLRequest(URL: url)
         
-        
-        /* 5 - create NSURLSessionDataTask and completion handler */
-        let task = session.dataTaskWithRequest(request) { data, response, downloadError in
-            if let error = downloadError {
-                print("Could not complete the  request \(error)")
-            } else {
-                var parsingError: NSError? = nil
-                print(data)
+        /* 5 - Create NSURLSessionDataTask and completion handler */
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                print("There was an error with your request: \(error)")
+                return
             }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                if let response = response as? NSHTTPURLResponse {
+                    print("Your request returned an invalid response! Status code: \(response.statusCode)!")
+                } else if let response = response {
+                    print("Your request returned an invalid response! Response: \(response)!")
+                } else {
+                    print("Your request returned an invalid response!")
+                }
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                print("No data was returned by the request!")
+                return
+            }
+            
+            /* Parse the data! */
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            } catch {
+                parsedResult = nil
+                print("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            /* GUARD: Did Flickr return an error? */
+            guard let stat = parsedResult["stat"] as? String where stat == "ok" else {
+                print("Flickr API returned an error. See error code and message in \(parsedResult)")
+                return
+            }
+            
+            //get photos dictionary//
+            /* GUARD: Is "photos" key in our result? */
+            guard let photosDictionary = parsedResult["photos"] as? [String: AnyObject] else {
+                print("Cannot find keys 'photos' in \(parsedResult)")
+                return
+            }
+            
+            print(photosDictionary)
+            
+            //determine total number of photos//
+            var totalPhotosValue = 0
+            if let totalPhotos = photosDictionary["total"] as? String {
+                totalPhotosValue = (totalPhotos as NSString).integerValue
+            }
+            
+            if totalPhotosValue > 0 {
+                if let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] {
+                    /* Randomly select an image from the array of images returned  */
+                    let randomIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
+                    let photoDictionary = photosArray[randomIndex] as [String: AnyObject]
+                    let imageUrlString = photoDictionary["url_m"] as? String
+                    print(imageUrlString)
+                }
+            }
+            
+            
+            
         }
         
-        /* 6 - resume task*/
         task.resume()
+    
         
     }
     
+    // MARK: Escape HTML Parameters
     
-    /* Helper function: Given a dictionary of parameters, convert to a string for a url */
     func escapedParameters(parameters: [String : AnyObject]) -> String {
         
         var urlVars = [String]()
@@ -100,12 +161,7 @@ class ViewController: UIViewController {
         return (!urlVars.isEmpty ? "?" : "") + urlVars.joinWithSeparator("&")
     }
     
-    
-    
-    
-    
-    
-    
+
     
     
 }
