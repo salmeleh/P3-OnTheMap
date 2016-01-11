@@ -22,6 +22,38 @@ var parsedHearthstoneJSON = try! NSJSONSerialization.JSONObjectWithData(rawHeart
 
 func parseJSONAsDictionary(dictionary: NSDictionary) {
     /* Start playing with JSON here... */
+    guard let arrayOfBasicSetCardDictionaries = parsedHearthstoneJSON["Basic"] as? [[String: AnyObject]] else {
+        print("Cannot find key 'Basic' in \(parsedHearthstoneJSON)")
+        return
+    }
+    
+    for cardDictionary in arrayOfBasicSetCardDictionaries {
+        
+        let cardType = cardDictionary["type"] as? String
+        if cardType == "Minion" {
+            let cost = cardDictionary["cost"] as? Int
+            if cost == 5 {
+                print("cost = 5")
+            }
+            
+            let cardText = cardDictionary["text"] as? String
+            if cardText?.rangeOfString("Battlecry") != nil {
+                print("contains battlecry")
+            }
+            
+        }
+        
+        if cardType == "Weapon" {
+            let durability = cardDictionary["durability"] as? Int
+            if durability == 2 {
+                print("durability = 2")
+            }
+        }
+        
+        
+        
+        
+    }
 }
 
 parseJSONAsDictionary(parsedHearthstoneJSON)
