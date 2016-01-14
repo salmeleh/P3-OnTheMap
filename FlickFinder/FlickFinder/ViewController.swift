@@ -31,11 +31,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var latitudeTextField: UITextField!
     @IBOutlet weak var longitudeTextField: UITextField!
     
+    var tapRecognizer: UITapGestureRecognizer? = nil
+    
+    // MARK: Actions
+    
     @IBAction func searchPhotosByPhraseButtonTouchUp(sender: AnyObject) {
         let methodArguments: [String: String!] = [
             "method": METHOD_NAME,
             "api_key": API_KEY,
-            "text": "baby asian elephant",
+            "text": self.phraseTextField.text,
             "safe_search": SAFE_SEARCH,
             "extras": EXTRAS,
             "format": DATA_FORMAT,
@@ -47,6 +51,84 @@ class ViewController: UIViewController {
     @IBAction func searchPhotosByLatLonButtonTouchUp(sender: AnyObject) {
         print("Will implement this function in a later step...")
     }
+    
+    // MARK: Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+        tapRecognizer?.numberOfTapsRequired = 1
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.addKeyboardDismissRecognizer()
+        self.subscribeToKeyboardNotifications()
+
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.removeKeyboardDismissRecognizer()
+        self.unsubscribeToKeyboardNotifications()
+
+    }
+    
+    // MARK: Show/Hide Keyboard
+    func addKeyboardDismissRecognizer() {
+        self.view.addGestureRecognizer(tapRecognizer!)
+    }
+    
+    func removeKeyboardDismissRecognizer() {
+        self.view.removeGestureRecognizer(tapRecognizer!)
+    }
+    
+    func handleSingleTap(recognizer: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    //subscribe to keyboard show/hide
+    func subscribeToKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    //unsubscribe from keyboard show/hide
+    func unsubscribeToKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    
+    //move frame with keyboard show/hide
+    func keyboardWillShow(notification: NSNotification) {
+        if self.photoImageView.image != nil{
+            self.defaultLabel.alpha = 0.0
+        }
+        view.frame.origin.y -= getKeyboardHeight(notification)
+    }
+    
+    
+    func keyboardWillHide(notification: NSNotification){
+        if self.photoImageView.image != nil{
+            self.defaultLabel.alpha = 1.0
+        }
+        view.frame.origin.y += getKeyboardHeight(notification)
+    }
+    
+    
+    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        return keyboardSize.CGRectValue().height
+    }
+    
+    
+    
     
     // MARK: Flickr API
     
@@ -142,16 +224,16 @@ class ViewController: UIViewController {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.defaultLabel.alpha = 0.0
                         self.photoImageView.image = UIImage(data: imageData)
-                        self.photoTitleLabel.text = "\(photoTitle!)"
+                        self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
                     })
                 } else {
                     print("Image does not exist at \(imageURL)")
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue(), {
+                    self.photoTitleLabel.text = "No Photos Found. Search Again."
                     self.defaultLabel.alpha = 1.0
                     self.photoImageView.image = nil
-                    self.photoTitleLabel.text = "No Photos Found. Search Again."
                 })
             }
         }
