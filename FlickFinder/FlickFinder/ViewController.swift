@@ -36,6 +36,10 @@ class ViewController: UIViewController {
     // MARK: Actions
     
     @IBAction func searchPhotosByPhraseButtonTouchUp(sender: AnyObject) {
+        
+        /* Added from student request -- hides keyboard after searching */
+        self.dismissAnyVisibleKeyboards()
+        
         let methodArguments: [String: String!] = [
             "method": METHOD_NAME,
             "api_key": API_KEY,
@@ -49,7 +53,20 @@ class ViewController: UIViewController {
     }
     
     @IBAction func searchPhotosByLatLonButtonTouchUp(sender: AnyObject) {
-        print("Will implement this function in a later step...")
+        
+        /* Added from student request -- hides keyboard after searching */
+        self.dismissAnyVisibleKeyboards()
+        
+        let methodArguments: [String: String!] = [
+            "method": METHOD_NAME,
+            "api_key": API_KEY,
+            "bbox": convertToBBOX(),
+            "safe_search": SAFE_SEARCH,
+            "extras": EXTRAS,
+            "format": DATA_FORMAT,
+            "nojsoncallback": NO_JSON_CALLBACK
+        ]
+        getImageFromFlickrBySearch(methodArguments)
     }
     
     // MARK: Life Cycle
@@ -59,26 +76,30 @@ class ViewController: UIViewController {
         
         tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
         tapRecognizer?.numberOfTapsRequired = 1
-
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        /* Add tap recognizer to dismiss keyboard */
         self.addKeyboardDismissRecognizer()
+        
+        /* Subscribe to keyboard events so we can adjust the view to show hidden controls */
         self.subscribeToKeyboardNotifications()
-
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
+        /* Remove tap recognizer */
         self.removeKeyboardDismissRecognizer()
+        
+        /* Unsubscribe to all keyboard events */
         self.unsubscribeToKeyboardNotifications()
-
     }
     
     // MARK: Show/Hide Keyboard
+    
     func addKeyboardDismissRecognizer() {
         self.view.addGestureRecognizer(tapRecognizer!)
     }
@@ -91,35 +112,32 @@ class ViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    //subscribe to keyboard show/hide
     func subscribeToKeyboardNotifications() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    //unsubscribe from keyboard show/hide
     func unsubscribeToKeyboardNotifications() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    
-    //move frame with keyboard show/hide
     func keyboardWillShow(notification: NSNotification) {
-        if self.photoImageView.image != nil{
+        if self.photoImageView.image != nil {
             self.defaultLabel.alpha = 0.0
         }
-        view.frame.origin.y -= getKeyboardHeight(notification)
+        if self.view.frame.origin.y == 0.0 {
+            self.view.frame.origin.y -= self.getKeyboardHeight(notification) / 2
+        }
     }
     
-    
-    func keyboardWillHide(notification: NSNotification){
-        if self.photoImageView.image != nil{
+    func keyboardWillHide(notification: NSNotification) {
+        if self.photoImageView.image == nil {
             self.defaultLabel.alpha = 1.0
         }
-        view.frame.origin.y += getKeyboardHeight(notification)
+        if self.view.frame.origin.y != 0.0 {
+            self.view.frame.origin.y += self.getKeyboardHeight(notification) / 2
+        }
     }
-    
     
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
         let userInfo = notification.userInfo
@@ -128,6 +146,16 @@ class ViewController: UIViewController {
     }
     
     
+    //MARK: get lat/lon
+    func convertToBBOX() -> String {
+        /*The 4 values represent the bottom-left corner of the box and the top-right corner,
+        minimum_longitude, minimum_latitude, maximum_longitude, maximum_latitude.*/
+        let minimum_longitude: String = String(format: "%f", Float(longitudeTextField.text!)! - 0.011)
+        let minimum_lattitude: String = String(format: "%f", Float(latitudeTextField.text!)! - 0.011)
+        let maximum_longitude: String = String(format: "%f", Float(longitudeTextField.text!)! + 0.011)
+        let maximum_lattitude: String = String(format: "%f", Float(latitudeTextField.text!)! + 0.011)
+        return minimum_longitude + "," + minimum_lattitude + "," + maximum_longitude + "," + maximum_lattitude
+    }
     
     
     // MARK: Flickr API
@@ -181,21 +209,18 @@ class ViewController: UIViewController {
                 return
             }
             
-            /* 1 - Get the photos dictionary */
             /* GUARD: Is "photos" key in our result? */
             guard let photosDictionary = parsedResult["photos"] as? NSDictionary else {
                 print("Cannot find keys 'photos' in \(parsedResult)")
                 return
             }
             
-            /* 2 - Determine the total number of photos */
             /* GUARD: Is the "total" key in photosDictionary? */
             guard let totalPhotos = (photosDictionary["total"] as? NSString)?.integerValue else {
                 print("Cannot find key 'total' in \(photosDictionary)")
                 return
             }
             
-            /* 3 - If photos are returned, let's grab one! */
             if totalPhotos > 0 {
                 
                 /* GUARD: Is the "photo" key in photosDictionary? */
@@ -204,11 +229,8 @@ class ViewController: UIViewController {
                     return
                 }
                 
-                /* 4 - Get a random index, and pick a random photo's dictionary */
                 let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
                 let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
-                
-                /* 5 - Prepare the UI updates */
                 let photoTitle = photoDictionary["title"] as? String /* non-fatal */
                 
                 /* GUARD: Does our photo have a key for 'url_m'? */
@@ -219,7 +241,6 @@ class ViewController: UIViewController {
                 
                 let imageURL = NSURL(string: imageUrlString)
                 
-                /* 6 - Update the UI on the main thread */
                 if let imageData = NSData(contentsOfURL: imageURL!) {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.defaultLabel.alpha = 0.0
@@ -261,5 +282,16 @@ class ViewController: UIViewController {
         }
         
         return (!urlVars.isEmpty ? "?" : "") + urlVars.joinWithSeparator("&")
+    }
+}
+
+// MARK: - ViewController (Keyboard Fix)
+
+/* This extension was added as a fix based on student comments */
+extension ViewController {
+    func dismissAnyVisibleKeyboards() {
+        if phraseTextField.isFirstResponder() || latitudeTextField.isFirstResponder() || longitudeTextField.isFirstResponder() {
+            self.view.endEditing(true)
+        }
     }
 }
