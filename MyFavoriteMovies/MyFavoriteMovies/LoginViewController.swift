@@ -178,11 +178,10 @@ class LoginViewController: UIViewController {
     
     func loginWithToken(requestToken: String) {
         
-        print("loginWithToken: implement me!")
-        
         /* TASK: Login, then get a session id */
+        
         /* 1. Set the parameters */
-        let methodParameters = [
+        let methodParameters: [String: String!] = [
             "api_key": appDelegate.apiKey,
             "request_token": requestToken,
             "username": self.usernameTextField.text,
@@ -190,11 +189,12 @@ class LoginViewController: UIViewController {
         ]
         
         /* 2. Build the URL */
-        let urlString = appDelegate.baseURLString + "/authentication/token/validate_with_login" + appDelegate.escapedParameters(methodParameters)
+        let urlString = appDelegate.baseURLString + "authentication/token/validate_with_login" + appDelegate.escapedParameters(methodParameters)
         let url = NSURL(string: urlString)!
         
         /* 3. Configure the request */
         let request = NSMutableURLRequest(URL: url)
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
@@ -202,7 +202,7 @@ class LoginViewController: UIViewController {
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.debugTextLabel.text = "Login Failed (login step)."
+                    self.debugTextLabel.text = "Login Failed (Login Step)."
                 }
                 print("There was an error with your request: \(error)")
                 return
@@ -226,7 +226,6 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            
             /* 5. Parse the data */
             let parsedResult: AnyObject!
             do {
@@ -243,28 +242,31 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            /* GUARD: Is the "request_token" key in parsedResult? */
-            if let success
+            /* GUARD: Is the "success" key in parsedResult? */
+            guard let _ = parsedResult["success"] as? Bool else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.debugTextLabel.text = "Login Failed (Login Step)."
+                }
+                print("Login failed.")
+                return
+            }
+            
+            /* 6. Use the data! */
+            self.getSessionID(self.appDelegate.requestToken!)
         }
-        
         
         /* 7. Start the request */
         task.resume()
-
-        
-        
-        
-        
     }
     
     func getSessionID(requestToken: String) {
-        
-        print("getSessionID: implement me!")
-        
         /* TASK: Get a session ID, then store it (appDelegate.sessionID) and get the user's id */
         /* 1. Set the parameters */
-        let methodParameters = [
-            "api_key": appDelegate.apiKey
+        let methodParameters: [String: String!] = [
+            "api_key": appDelegate.apiKey,
+            "request_token": requestToken,
+            "username": self.usernameTextField.text,
+            "password": self.passwordTextField.text
         ]
         
         /* 2. Build the URL */
@@ -273,6 +275,7 @@ class LoginViewController: UIViewController {
         
         /* 3. Configure the request */
         let request = NSMutableURLRequest(URL: url)
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
@@ -280,7 +283,7 @@ class LoginViewController: UIViewController {
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.debugTextLabel.text = "Login Failed (SessionID)."
+                    self.debugTextLabel.text = "Login Failed (getSessionID Failed - 1)."
                 }
                 print("There was an error with your request: \(error)")
                 return
@@ -304,8 +307,6 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            
-            
             /* 5. Parse the data */
             let parsedResult: AnyObject!
             do {
@@ -322,21 +323,20 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            /* GUARD: Is the "request_token" key in parsedResult? */
-            guard let session_ID = parsedResult["session_id"] as? String else {
+            /* GUARD: Is the "success" key in parsedResult? */
+            guard let sessionID = parsedResult["session_id"] as? String else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.debugTextLabel.text = "Login Failed (SessionID)."
+                    self.debugTextLabel.text = "Login Failed (getSessionID Failed - 2)."
                 }
-                print("Cannot find key 'session_id' in \(parsedResult)")
+                print("Login failed.")
                 return
             }
+            
         
-        
-            /* 6. Use the data! */
-            self.appDelegate.sessionID = sessionID
+        /* 6. Use the data! */
+        print(sessionID)
         }
-        
-        
+    
         /* 7. Start the request */
         task.resume()
     }
