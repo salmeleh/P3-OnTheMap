@@ -344,12 +344,13 @@ class LoginViewController: UIViewController {
     func getUserID(session_id : String) {
         
         /* TASK: Get the user's ID, then store it (appDelegate.userID) for future use and go to next view! */
+        
         /* 1. Set the parameters */
-        let methodParameters: [String: String!]  = [
+        let methodParameters = [
             "api_key": appDelegate.apiKey,
-            "session_id": self.appDelegate.sessionID
+            "session_id": session_id
         ]
-    
+        
         /* 2. Build the URL */
         let urlString = appDelegate.baseURLSecureString + "account" + appDelegate.escapedParameters(methodParameters)
         let url = NSURL(string: urlString)!
@@ -364,7 +365,7 @@ class LoginViewController: UIViewController {
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.debugTextLabel.text = "Login Failed (getUserID-1)."
+                    self.debugTextLabel.text = "Login Failed (User ID)."
                 }
                 print("There was an error with your request: \(error)")
                 return
@@ -405,24 +406,21 @@ class LoginViewController: UIViewController {
             }
             
             /* GUARD: Is the "sessionID" key in parsedResult? */
-            guard let userID = parsedResult["id"] as? Int else {
+            guard let userID = parsedResult!["id"] as? Int else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.debugTextLabel.text = "Login Failed (getUserID-2)."
+                    self.debugTextLabel.text = "Login Failed (User ID)."
                 }
-                print("Cannot find key 'sessionID' in \(parsedResult)")
+                print("Cannot find key 'id' in \(parsedResult)")
                 return
             }
             
             /* 6. Use the data! */
             self.appDelegate.userID = userID
             self.completeLogin()
-            print(userID)
-        
         }
         
         /* 7. Start the request */
         task.resume()
-
     }
 }
 
