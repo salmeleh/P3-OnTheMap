@@ -40,7 +40,7 @@ class MovieDetailViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         
         super.viewWillAppear(animated)
-        
+                
         if let movie = movie {
             
             /* Setting some defaults ... */
@@ -50,9 +50,9 @@ class MovieDetailViewController: UIViewController {
             
             /* TASK A: Get favorite movies, then update the favorite buttons */
             /* 1A. Set the parameters */
-            let methodParameters: [String: String!] = [
+            let methodParameters = [
                 "api_key": appDelegate.apiKey,
-                "session_id": appDelegate.sessionID
+                "session_id": appDelegate.sessionID!
             ]
             
             /* 2A. Build the URL */
@@ -68,9 +68,6 @@ class MovieDetailViewController: UIViewController {
                 
                 /* GUARD: Was there an error? */
                 guard (error == nil) else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        //self.debugTextLabel.text = "Login Failed (Session ID)."
-                    }
                     print("There was an error with your request: \(error)")
                     return
                 }
@@ -93,7 +90,7 @@ class MovieDetailViewController: UIViewController {
                     return
                 }
                 
-                /* 5. Parse the data */
+                /* 5A. Parse the data */
                 let parsedResult: AnyObject!
                 do {
                     parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
@@ -109,18 +106,36 @@ class MovieDetailViewController: UIViewController {
                     return
                 }
                 
-                /* 6A USE THE DATA*/
+                /* GUARD: Is the "results" key in parsedResult? */
+                guard let results = parsedResult["results"] as? [[String : AnyObject]] else {
+                    print("Cannot find key 'results' in \(parsedResult)")
+                    return
+                }
                 
+                /* 6A. Use the data! */
+                var isFavorite = false
+                let movies = Movie.moviesFromResults(results)
                 
-
+                for movie in movies {
+                    if movie.id == self.movie!.id {
+                        isFavorite = true
+                    }
+                }
                 
-                
+                dispatch_async(dispatch_get_main_queue()) {
+                    if isFavorite {
+                        self.favoriteButton.hidden = true
+                        self.unFavoriteButton.hidden = false
+                    } else {
+                        self.favoriteButton.hidden = false
+                        self.unFavoriteButton.hidden = true
+                    }
+                }
             }
-
+            
             /* 7A. Start the request */
-                task.resume()
-            
-            
+            task.resume()
+        
             /* TASK B: Get the poster image, then populate the image view */
             if let posterPath = movie.posterPath {
                 
@@ -184,6 +199,8 @@ class MovieDetailViewController: UIViewController {
     
     @IBAction func unFavoriteButtonTouchUpInside(sender: AnyObject) {
         
+        print("unFavoriteButtonTouchUpInside: implement me!")
+        
         /* TASK: Remove movie as favorite, then update favorite buttons */
         /* 1. Set the parameters */
         /* 2. Build the URL */
@@ -198,11 +215,77 @@ class MovieDetailViewController: UIViewController {
         
         /* TASK: Add movie as favorite, then update favorite buttons */
         /* 1. Set the parameters */
+        let methodParameters = [
+            "api_key": appDelegate.apiKey,
+            "session_id": appDelegate.sessionID!
+        ]
+        
         /* 2. Build the URL */
+        let urlString = appDelegate.baseURLSecureString + "account/\(appDelegate.userID!)/favorite" + appDelegate.escapedParameters(methodParameters)
+        let url = NSURL(string: urlString)!
+        
         /* 3. Configure the request */
+        let request = NSMutableURLRequest(URL: url)
+        
+        request.HTTPMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        request.HTTPBody = "{\n  \"media_type\": \"movie\",\n  \"media_id\": 550,\n  \"favorite\": true\n}".dataUsingEncoding(NSUTF8StringEncoding);
+        
+        let session = NSURLSession.sharedSession()
+        
         /* 4. Make the request */
-        /* 5. Parse the data */
-        /* 6. Use the data! */
-        /* 7. Start the request */
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                print("There was an error with your request: \(error)")
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                print("No data was returned by the request!")
+                return
+            }
+         
+            /* 5. Parse the data */
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            } catch {
+                parsedResult = nil
+                print("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            
+            /* GUARD: Is the "response" key in parsedResult? */
+            guard let response = parsedResult!["status_code"] as? Int else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    //self.debugTextLabel.text = "Login Failed (User ID)."
+                }
+                print("Cannot find key 'status_code' in \(parsedResult)")
+                return
+            }
+            
+            /* 6. Use the data! */
+            if (response == 1 || response == 12) {
+                print("favorite success")
+                //change color of heart
+            }
+            else { print("favorite failed")}
+            
+            
+        }
+    task.resume()
+        
+        
     }
+    
+    
+    
+    
+    
 }
