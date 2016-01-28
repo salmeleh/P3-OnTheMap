@@ -287,7 +287,18 @@ extension TMDBClient {
     func postToWatchlist(movie: TMDBMovie, watchlist: Bool, completionHandler: (result: Int?, error: NSError?) -> Void) {
         
         /* 1. Specify parameters, method (if has {key}), and HTTP body (if POST) */
+        let parameters = [TMDBClient.ParameterKeys.SessionID: TMDBClient.sharedInstance().sessionID!]
+        var mutableMethod : String = Methods.AccountIDWatchlist
+        mutableMethod = TMDBClient.substituteKeyInMethod(mutableMethod, key: TMDBClient.URLKeys.UserID, value: String(TMDBClient.sharedInstance().userID!))!
+        let jsonBody: [String: AnyObject] = [
+            TMDBClient.JSONBodyKeys.MediaType: "movie",
+            TMDBClient.JSONBodyKeys.MediaID: movie.id as Int,
+            TMDBClient.JSONBodyKeys.Watchlist: watchlist as Bool
+        ]
+        
         /* 2. Make the request */
+        taskForPOSTMethod(mutableMethod, parameters: parameters, jsonBody: <#T##[String : AnyObject]#>, completionHandler: <#T##(result: AnyObject!, error: NSError?) -> Void#>)
+        
         /* 3. Send the desired value(s) to completion handler */
         print("implement me: TMDBClient postToWatchlist")
     }
