@@ -101,24 +101,28 @@ class LoginViewController: UIViewController {
     
     // MARK: Login
     @IBAction func loginButtonPressed(sender: AnyObject) {
-//        
-//        if emailTextField.text!.isEmpty {
-//            launchAlertController("Username field is empty")
-//        } else if passwordTextField.text!.isEmpty {
-//            launchAlertController("Password field is empty")
-//        } else {
+        
+        if emailTextField.text!.isEmpty {
+            launchAlertController("Username field is empty")
+        } else if passwordTextField.text!.isEmpty {
+            launchAlertController("Password field is empty")
+        } else {
         
             loginButton.hidden = true
-            
+
+        
             //loading animation
             let activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
             activityView.center = view.center
             activityView.startAnimating()
             view.addSubview(activityView)
-            
+        
             //begin POST session
             UdacityClient.sharedInstance().postSession(emailTextField.text!, password: passwordTextField.text!) {(sessionID, error) in
                 if let sessionID = sessionID {
+                    
+                    print("sessionID =\(sessionID)")
+
                     
                     dispatch_async(dispatch_get_main_queue(), {
                         activityView.stopAnimating()
@@ -129,26 +133,24 @@ class LoginViewController: UIViewController {
                     print("sessionID =\(sessionID)")
                     UdacityClient.sharedInstance().sessionID = sessionID
                     
-                    dispatch_async(dispatch_get_main_queue(), {
-                        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
-                        self.presentViewController(controller, animated: true, completion: nil)
-                        
-                    })
+                    //complete login
+                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
+                    self.presentViewController(controller, animated: true, completion: nil)
+                    
+                
                     
                 } else {
-
-                    self.launchAlertController("Invalid Credentials")
-                    
                     dispatch_async(dispatch_get_main_queue(), {
                         activityView.stopAnimating()
                         activityView.removeFromSuperview()
+                        self.loginButton.hidden = false
+                        self.launchAlertController("Invalid Credentials")
                     })
-                    self.loginButton.hidden = false
                     
                 }
                 
             }
-//        }
+        }
     }
     
     
