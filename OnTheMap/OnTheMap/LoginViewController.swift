@@ -101,7 +101,6 @@ class LoginViewController: UIViewController {
     
     // MARK: Login
     @IBAction func loginButtonPressed(sender: AnyObject) {
-        print("loginButtonPressed")
         
         if emailTextField.text!.isEmpty {
             launchAlertController("Username field is empty")
@@ -118,25 +117,21 @@ class LoginViewController: UIViewController {
             view.addSubview(activityView)
             
             //begin POST session
-            UdacityClient.sharedInstance().postSession(emailTextField.text!, password: passwordTextField.text!) {(result, error) in
-                dispatch_async(dispatch_get_main_queue(), {
-                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
-                    self.presentViewController(controller, animated: true, completion: nil)
+            UdacityClient.sharedInstance().postSession(emailTextField.text!, password: passwordTextField.text!) {(sessionID, error) in
+                if let sessionID = sessionID {
+                    //success
+                    print("sessionID =\(sessionID)")
+                    UdacityClient.sharedInstance().sessionID = sessionID
                     
-                })
-            
-                /* Guard: was there an error? */
-                guard error == nil else {
-                    
-                    /* Check to see what type of error */
-                    if let errorString = error?.userInfo[NSLocalizedDescriptionKey] as? String {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
+                        self.presentViewController(controller, animated: true, completion: nil)
                         
-                        /* Display an alert and shake the view */
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.launchAlertController(errorString)
-                        })
-                    }
-                    return
+                    })
+                } else {
+
+                    self.launchAlertController("Invalid Credentials")
+                    
                 }
             }
         }
