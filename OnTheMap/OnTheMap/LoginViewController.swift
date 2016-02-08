@@ -68,28 +68,29 @@ class LoginViewController: UIViewController {
             self.passwordTextField.becomeFirstResponder()
         }
         if textField == self.passwordTextField {
-                initialLogin()
+                //loginButtonPressed()()
         }
         
         return true
     }
     
     
-    func launchAlertController() {
-        let alertController = UIAlertController(title: "Login Failed", message: "Please try another username/password", preferredStyle: .Alert)
+    /* shows alert view with error */
+    func launchAlertController(error: String) {
+        let alertController = UIAlertController(title: "", message: error, preferredStyle: .Alert)
         
 //        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
 //            // ...
 //        }
 //        alertController.addAction(cancelAction)
         
-        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+        let OKAction = UIAlertAction(title: "Dismiss", style: .Default) { (action) in
             self.dismissViewControllerAnimated(true, completion: nil)
         }
         alertController.addAction(OKAction)
         
         self.presentViewController(alertController, animated: true) {
-        // ...
+        
         }
     }
     
@@ -103,20 +104,41 @@ class LoginViewController: UIViewController {
         print("loginButtonPressed")
         
         if emailTextField.text!.isEmpty {
-            debugTextLabel.text = "Username Empty."
+            launchAlertController("Username field is empty")
         } else if passwordTextField.text!.isEmpty {
-            debugTextLabel.text = "Password Empty."
+            launchAlertController("Password field is empty")
         } else {
+        
+            loginButton.hidden = true
+            
+            //loading animation
+            let activityView = UIActivityIndicatorView.init(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+            activityView.center = view.center
+            activityView.startAnimating()
+            view.addSubview(activityView)
+            
+            //begin POST session
             UdacityClient.sharedInstance().postSession(emailTextField.text!, password: passwordTextField.text!) {(result, error) in
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.debugTextLabel.text = ""
-                    //self.setUIEnabled(enabled: true)
                     let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
                     self.presentViewController(controller, animated: true, completion: nil)
                     
                 })
-            }
             
+                /* Guard: was there an error? */
+                guard error == nil else {
+                    
+                    /* Check to see what type of error */
+                    if let errorString = error?.userInfo[NSLocalizedDescriptionKey] as? String {
+                        
+                        /* Display an alert and shake the view */
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.launchAlertController(errorString)
+                        })
+                    }
+                    return
+                }
+            }
         }
     }
     
@@ -165,6 +187,7 @@ class LoginViewController: UIViewController {
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
         return keyboardSize.CGRectValue().height
     }
+
 }
 
 
