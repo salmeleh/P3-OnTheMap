@@ -72,7 +72,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func logoutButtonPressed(sender: AnyObject) {
-        
+        print("logoutButtonPressed")
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
         request.HTTPMethod = "DELETE"
         var xsrfCookie: NSHTTPCookie? = nil
@@ -87,10 +87,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil { // Handle error...
+                print("logoutButtonPressed error")
                 return
             }
             let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5)) /* subset response data! */
-            print(NSString(data: newData, encoding: NSUTF8StringEncoding))
+            print(NSString(data: newData, encoding: NSUTF8StringEncoding)!)
         }
         
         

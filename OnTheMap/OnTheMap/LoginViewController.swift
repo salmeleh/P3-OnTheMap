@@ -62,8 +62,6 @@ class LoginViewController: UIViewController {
         self.removeKeyboardDismissRecognizer()
         self.unsubscribeToKeyboardNotifications()
     }
-
-    
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == self.emailTextField {
@@ -77,57 +75,50 @@ class LoginViewController: UIViewController {
     }
     
     
+    func launchAlertController() {
+        let alertController = UIAlertController(title: "Login Failed", message: "Please try another username/password", preferredStyle: .Alert)
+        
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+//            // ...
+//        }
+//        alertController.addAction(cancelAction)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+        // ...
+        }
+    }
+    
+    
+    
+    
     
     
     // MARK: Login
     @IBAction func loginButtonPressed(sender: AnyObject) {
-        initialLogin()
-    }
-    
-    func initialLogin() {
+        print("loginButtonPressed")
         
         if emailTextField.text!.isEmpty {
             debugTextLabel.text = "Username Empty."
         } else if passwordTextField.text!.isEmpty {
             debugTextLabel.text = "Password Empty."
         } else {
-            //completeLogin()'
-            
-            let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-            request.HTTPMethod = "POST"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.HTTPBody = "{\"udacity\": {\"username\": \"\(emailTextField.text)\", \"password\": \"\(passwordTextField.text)\"}}".dataUsingEncoding(NSUTF8StringEncoding)
-            
-            let session = NSURLSession.sharedSession()
-            let task = session.dataTaskWithRequest(request) { data, response, error in
-                if error != nil { //handle error
-                    return
-                }
-                let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5)) /* subset response data! */
-                print(NSString(data: newData, encoding: NSUTF8StringEncoding))
+            UdacityClient.sharedInstance().postSession(emailTextField.text!, password: passwordTextField.text!) {(result, error) in
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.debugTextLabel.text = ""
+                    //self.setUIEnabled(enabled: true)
+                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
+                    self.presentViewController(controller, animated: true, completion: nil)
+                    
+                })
             }
             
-            task.resume()
-            completeLogin()
-            
         }
-
-        
     }
-    
-    
-    func completeLogin() {
-        dispatch_async(dispatch_get_main_queue(), {
-            self.debugTextLabel.text = ""
-            //self.setUIEnabled(enabled: true)
-            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
-            self.presentViewController(controller, animated: true, completion: nil)
-        })
-    }
-    
-    
-
     
     
     
