@@ -72,7 +72,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func logoutButtonPressed(sender: AnyObject) {
-        print("logoutButtonPressed")
+
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
         request.HTTPMethod = "DELETE"
         var xsrfCookie: NSHTTPCookie? = nil
@@ -99,7 +99,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         dispatch_async(dispatch_get_main_queue(), {
             //creturn to login
-            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! UITabBarController
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController")
             self.presentViewController(controller, animated: true, completion: nil)
         })
         

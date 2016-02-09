@@ -46,6 +46,12 @@ class TableViewController: UITableViewController {
         
         task.resume()
         
+        dispatch_async(dispatch_get_main_queue(), {
+            //creturn to login
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! UITabBarController
+            self.presentViewController(controller, animated: true, completion: nil)
+        })
+        
     }
     
     
