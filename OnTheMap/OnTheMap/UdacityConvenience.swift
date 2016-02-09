@@ -39,31 +39,39 @@ extension UdacityClient {
         }
     }
     
-    
-    func deleteSession() {
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-        request.HTTPMethod = "DELETE"
-        var xsrfCookie: NSHTTPCookie? = nil
-        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-        for cookie in sharedCookieStorage.cookies! {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+    //MARK: Function to GET user info
+    func getSession(username: String, completionHandler: (result: [String]?, error: NSError?) -> Void){
+        let method = Methods.Users + username
+        
+        taskForGetMethod(method) {(JSONResult, error) in
             
-        }
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil { // Handle error...
+            guard error == nil else {
+                completionHandler(result: nil, error: error)
                 return
             }
-            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5)) /* subset response data! */
-            print(NSString(data: newData, encoding: NSUTF8StringEncoding))
+            
+            if let dictionary = JSONResult[JSONResponseKeys.User] as? [String:AnyObject] {
+                var result = [String]()
+                
+                if let firstName = dictionary[JSONResponseKeys.FirstName] as? String{
+                    result.append(firstName)
+                    if let lastName = dictionary[JSONResponseKeys.LastName] as? String {
+                        result.append(lastName)
+                        completionHandler(result: result, error: nil)
+                    } else {
+                        completionHandler(result: nil, error: NSError(domain: "getUserData parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse user data: Last Name"]))
+                    }
+                } else {
+                    completionHandler(result: nil, error: NSError(domain: "getUserData parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse user data: First Name"]))
+                }
+            }
         }
-        
-        
-        task.resume()
+
     }
+    
+    
+    
+    
     
     
     
