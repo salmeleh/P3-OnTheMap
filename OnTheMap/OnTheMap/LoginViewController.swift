@@ -124,15 +124,17 @@ class LoginViewController: UIViewController {
                     dispatch_async(dispatch_get_main_queue(), {
                         activityView.stopAnimating()
                         activityView.removeFromSuperview()
+                        
+                        //success
+                        print("sessionID = \(sessionID)")
+                        UdacityClient.sharedInstance().sessionID = sessionID
+                        
+                        //complete login
+                        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
+                        self.presentViewController(controller, animated: true, completion: nil)
                     })
                     
-                    //success
-                    print("sessionID =\(sessionID)")
-                    UdacityClient.sharedInstance().sessionID = sessionID
                     
-                    //complete login
-                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
-                    self.presentViewController(controller, animated: true, completion: nil)
                     
                 
                     
