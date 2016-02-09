@@ -120,10 +120,7 @@ class LoginViewController: UIViewController {
             //begin POST session
             UdacityClient.sharedInstance().postSession(emailTextField.text!, password: passwordTextField.text!) {(sessionID, error) in
                 if let sessionID = sessionID {
-                    
-                    print("sessionID =\(sessionID)")
-
-                    
+    
                     dispatch_async(dispatch_get_main_queue(), {
                         activityView.stopAnimating()
                         activityView.removeFromSuperview()
