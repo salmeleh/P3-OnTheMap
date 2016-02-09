@@ -29,6 +29,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
         
         // The "locations" array is an array of dictionary objects that are similar to the JSON
         // data that you can download from parse.
