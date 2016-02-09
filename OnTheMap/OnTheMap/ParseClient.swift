@@ -34,14 +34,7 @@ class ParseClient : NSObject {
     
     //MARK: taskForPostMethod
     
-    
-    
-    
-    
-    
-    //MARK: taskForPutMethod
-    
-    
+
     
     
     
