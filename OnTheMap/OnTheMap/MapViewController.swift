@@ -28,6 +28,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func loadData() {
+        print("func loadData called")
         ParseClient.sharedInstance().getStudentLocations() { (result, error) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -35,10 +36,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     self.studentLocations = result!
                     self.generateAnnotations()
                     self.mapView.addAnnotations(self.annotations)
-
+                    print("data loaded")
                 }
             } else {
                 print(error!)
+                print("data not loaded")
             }
         }
     }

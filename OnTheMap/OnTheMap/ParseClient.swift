@@ -36,7 +36,7 @@ class ParseClient : NSObject {
             if error != nil {
                 return
             }
-            //print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+            print(NSString(data: data!, encoding: NSUTF8StringEncoding))
         }
         task.resume()
     }
@@ -66,14 +66,13 @@ class ParseClient : NSObject {
     
     
     /* Raw JSON -> useable object */
-    class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void){
+    class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: String?) -> Void){
         
         var parsedResult: AnyObject!
         do {
             parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
         } catch {
-            let userInfo = [NSLocalizedDescriptionKey: "Could not parse the data as JSON: '\(data)'"]
-            completionHandler(result: nil, error: NSError(domain: "parseJSONWithCompletionHandler", code: 1, userInfo: userInfo))
+            completionHandler(result: nil, error: "Could not parse the data as JSON")
         }
         completionHandler(result: parsedResult, error: nil)
     }

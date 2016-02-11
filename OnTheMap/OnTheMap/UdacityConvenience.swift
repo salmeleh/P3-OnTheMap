@@ -11,7 +11,7 @@ import Foundation
 extension UdacityClient {
     
     //MARK: Function to POST new session
-    func postSession(username: String, password: String, completionHandler: (result: String?, error: NSError?) -> Void){
+    func postSession(username: String, password: String, completionHandler: (result: String?, error: String?) -> Void){
         let method = Methods.Session
         let jsonBody = [
             JSONBodyKeys.Udacity : [
@@ -30,17 +30,17 @@ extension UdacityClient {
                 if let result = dictionary[JSONResponseKeys.Key] as? String {
                     completionHandler(result: result, error: nil)
                 } else {
-                    completionHandler(result: nil, error: NSError(domain: "POST Session parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse session"]))
+                    completionHandler(result: nil, error: "Could not parse session")
                 }
             } else {
-                completionHandler(result: nil, error: NSError(domain: "POST Session parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse session"]))
+                completionHandler(result: nil, error: "Could not parse session")
                 
             }
         }
     }
     
     //MARK: Function to GET user info
-    func getSession(username: String, completionHandler: (result: [String]?, error: NSError?) -> Void){
+    func getSession(username: String, completionHandler: (result: [String]?, error: String?) -> Void){
         let method = Methods.Users + username
         
         taskForGetMethod(method) {(JSONResult, error) in
@@ -59,10 +59,10 @@ extension UdacityClient {
                         result.append(lastName)
                         completionHandler(result: result, error: nil)
                     } else {
-                        completionHandler(result: nil, error: NSError(domain: "getUserData parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse user data: Last Name"]))
+                        completionHandler(result: nil, error: "Could not parse user data: Last Name")
                     }
                 } else {
-                    completionHandler(result: nil, error: NSError(domain: "getUserData parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse user data: First Name"]))
+                    completionHandler(result: nil, error: "Could not parse user data: First Name")
                 }
             }
         }
