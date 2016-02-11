@@ -68,7 +68,7 @@ class LoginViewController: UIViewController {
             self.passwordTextField.becomeFirstResponder()
         }
         if textField == self.passwordTextField {
-                //loginButtonPressed()()
+                loginButtonPressed(UIButton)
         }
         
         return true
@@ -151,6 +151,8 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
+    
     
     
     

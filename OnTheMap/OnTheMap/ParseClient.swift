@@ -37,6 +37,7 @@ class ParseClient : NSObject {
                 return
             }
             print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+            print("taskForGetMethod")
         }
         task.resume()
     }

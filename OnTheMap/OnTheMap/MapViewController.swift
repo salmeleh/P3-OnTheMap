@@ -12,14 +12,14 @@ import MapKit
 class MapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
-    var studentInfo = [StudentInfo]()
+    var studentLocations: [StudentInfo] = []
+    var annotations = [MKPointAnnotation]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         
     }
-    
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -28,12 +28,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func loadData() {
+        annotations.removeAll()
         ParseClient.sharedInstance().getStudentLocations() { (result, error) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
                     
-                    self.studentInfo = result!
-                    
+                    self.studentLocations = result!
+                    self.generateAnnotations()
+                    self.mapView.addAnnotations(self.annotations)
+
                 }
             } else {
                 print(error!)
@@ -42,7 +45,22 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    
+    func generateAnnotations() {
+        for dictionary in studentLocations {
+            let lat = CLLocationDegrees(dictionary.latitude as Double)
+            let long = CLLocationDegrees(dictionary.longitude as Double)
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            let first = dictionary.firstName as String
+            let last = dictionary.lastName as String
+            let mediaURL = dictionary.mediaURL as String
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = "\(first) \(last)"
+            annotation.subtitle = mediaURL
+            annotations.append(annotation)
+        }
+    }
+
 
     
     
