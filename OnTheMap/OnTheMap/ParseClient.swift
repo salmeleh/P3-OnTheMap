@@ -10,12 +10,10 @@ import Foundation
 
 class ParseClient : NSObject {
     
-    //MARK: -- Properties
+    //MARK: Properties
     
-    /* Shared session */
     var session: NSURLSession
     
-    /* Authentication state */
     var sessionID : String? = nil
     var userID : Int? = nil
     
@@ -27,14 +25,42 @@ class ParseClient : NSObject {
     
     
     //MARK: taskForGetMethod
+    func getStudentsLocations(completionHandler: (result: [StudentInfo]?, error: String?) -> Void) {
+    let urlString = ParseClient.Constants.baseSecureURL
+    let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
+    request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
+    request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
     
-    
-    
+    let session = NSURLSession.sharedSession()
+    let task = session.dataTaskWithRequest(request) { data, response, error in
+        if error != nil {
+            return
+        }
+        print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+        }
+        task.resume()
+    }
+
     
     
     //MARK: taskForPostMethod
-    
-
+    func postStudentLocation(mapString: String, mediaURL: String, completionHandler: (success: Bool) -> Void) {
+        let request = NSMutableURLRequest(URL: NSURL(string: "\(ParseClient.Constants.baseSecureURL)")!)
+        request.HTTPMethod = "POST"
+        request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.HTTPBody = "{\"uniqueKey\": \"\(ParseClient.JSONBodyKeys.UniqueKey)\", \"firstName\": \"\(ParseClient.JSONBodyKeys.FirstName)\", \"lastName\": \"\(ParseClient.JSONBodyKeys.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(ParseClient.JSONBodyKeys.Latitude), \"longitude\": \(ParseClient.JSONBodyKeys.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            if error != nil {
+                return
+            }
+            print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+        }
+        task.resume()
+    }
     
     
     
@@ -53,28 +79,20 @@ class ParseClient : NSObject {
     }
     
     
-    /* Diction of parameters: URL -> String */
+    /* URL -> String */
     class func escapedParameters(parameters: [String : AnyObject]) -> String {
         var urlVars = [String]()
-        
         for (key, value) in parameters {
-            
-            /* Make sure that it is a string value */
             let stringValue = "\(value)"
-            
-            /* Escape it */
             let escapedValue = stringValue.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
-            
-            /* Append it */
             urlVars += [key + "=" + "\(escapedValue!)"]
         }
         return (!urlVars.isEmpty ? "?" : "") + urlVars.joinWithSeparator("&")
-        
     }
     
     
     
-    /* MARK -- Shared Instance */
+    /* MARK: Shared Instance */
     class func sharedInstance() -> UdacityClient{
         
         struct Singleton {

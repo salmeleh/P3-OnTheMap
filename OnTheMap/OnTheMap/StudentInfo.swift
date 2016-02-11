@@ -21,7 +21,7 @@ struct StudentInfo {
     var uniqueKey: String?
     var createdAt: NSDate
     var updatedAt: NSDate
-    static var studentData = [StudentInfo]()
+    
     
     //MARK: Init with dictionary
     init(dictionary: [String : AnyObject]) {
@@ -39,6 +39,18 @@ struct StudentInfo {
         self.uniqueKey = dictionary[ParseClient.JSONResponseKeys.UniqueKey] as! String?
         self.createdAt = dateFormatter.dateFromString(dictionary[ParseClient.JSONResponseKeys.CreatedAt] as! String)!
         self.updatedAt = dateFormatter.dateFromString(dictionary[ParseClient.JSONResponseKeys.UpdatedAt] as! String)!
+    }
+    
+    
+    /* Given an array of dictionaries, convert to an array of StudentInfos */
+    static func studentsFromDictionary(results: [[String : AnyObject]]) -> [StudentInfo] {
+        var users = [StudentInfo]()
+        
+        for result in results {
+            users.append(StudentInfo(dictionary: result))
+        }
+        
+        return users
     }
     
     

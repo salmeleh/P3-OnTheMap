@@ -10,38 +10,38 @@ import Foundation
 
 extension UdacityClient {
     
-    //MARK: -- Constants
+    //MARK: Constants
     struct Constants{
         static let UdacityBaseURL: String = "https://www.udacity.com/api/"
     }
     
-    //MARK: -- Methods
+    //MARK: Methods
     struct Methods{
         static let Session = "session"
         static let Users = "users/"
     }
     
-    //MARK: -- JSON Body Keys
+    //MARK: JSON Body Keys
     struct JSONBodyKeys {
         static let Username = "username"
         static let Password = "password"
         static let Udacity = "udacity"
     }
     
-    //MARK: -- JSON Response Keys
+    //MARK: JSON Response Keys
     struct JSONResponseKeys {
         
-        //MARK: -- Account
+        //MARK: Account
         static let Account = "account"
         static let Registered = "registered"
         static let Key = "key"
         
-        //MARK: -- Session
+        //MARK: Session
         static let Session = "session"
         static let ID = "id"
         static let Expiration = "expiration"
         
-        //MARK: -- User Data
+        //MARK: User Data
         static let User = "user"
         static let FirstName = "first_name"
         static let LastName = "last_name"
