@@ -25,18 +25,18 @@ class ParseClient : NSObject {
     
     
     //MARK: taskForGetMethod
-    func getStudentsLocations(completionHandler: (result: [StudentInfo]?, error: String?) -> Void) {
-    let urlString = ParseClient.Constants.baseSecureURL
-    let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
-    request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
-    request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
-    
-    let session = NSURLSession.sharedSession()
-    let task = session.dataTaskWithRequest(request) { data, response, error in
-        if error != nil {
-            return
-        }
-        print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+    func getStudentLocations(completionHandler: (result: [StudentInfo]?, error: String?) -> Void) {
+        let urlString = ParseClient.Constants.baseSecureURL
+        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
+        request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            if error != nil {
+                return
+            }
+            print(NSString(data: data!, encoding: NSUTF8StringEncoding))
         }
         task.resume()
     }
@@ -93,10 +93,10 @@ class ParseClient : NSObject {
     
     
     /* MARK: Shared Instance */
-    class func sharedInstance() -> UdacityClient{
+    class func sharedInstance() -> ParseClient{
         
         struct Singleton {
-            static var sharedInstance = UdacityClient()
+            static var sharedInstance = ParseClient()
         }
         return Singleton.sharedInstance
     }
