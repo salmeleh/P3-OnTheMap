@@ -27,6 +27,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // is set up as the map view's delegate.
     @IBOutlet weak var mapView: MKMapView!
     
+    var studentInfo = [StudentInfo]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     

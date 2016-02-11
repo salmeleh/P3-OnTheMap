@@ -8,8 +8,19 @@
 
 import UIKit
 
-class TableViewController: UITableViewController {
+class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
 
+    
+    var studentInfo = [StudentInfo]()
+    
+    private struct studentCellData {
+        var name: String?
+        var URL: String?
+    }
+    
+    private var studentCellDataArray = [studentCellData]()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -19,6 +30,32 @@ class TableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
+    
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("studentInfo", forIndexPath: indexPath) as UITableViewCell
+        
+        //Configure the cell
+        let info = studentCellDataArray[indexPath.row]
+        cell.textLabel?.text = info.name
+        cell.detailTextLabel?.text = info.URL
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return studentCellDataArray.count
+    }
+    
+    
 
 
     @IBAction func logoutButtonPressed(sender: AnyObject) {

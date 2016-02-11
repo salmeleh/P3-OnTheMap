@@ -1,5 +1,5 @@
 //
-//  StudentInformation.swift
+//  StudentInfo.swift
 //  OnTheMap
 //
 //  Created by Stu Almeleh on 2/9/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct StudentInformation {
+struct StudentInfo {
     
     //MARK: Properties
     var firstName: String
@@ -21,7 +21,7 @@ struct StudentInformation {
     var uniqueKey: String?
     var createdAt: NSDate
     var updatedAt: NSDate
-    static var studentData = [StudentInformation]()
+    static var studentData = [StudentInfo]()
     
     //MARK: Init with dictionary
     init(dictionary: [String : AnyObject]) {
