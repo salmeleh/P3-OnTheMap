@@ -33,10 +33,20 @@ class ParseClient : NSObject {
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil {
+            guard (error == nil) else {
+                completionHandler(result: nil, error: "Connection Error")
                 return
             }
-            print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+            guard let data = data else {
+                print("No data was returned by the request!")
+                return
+            }
+            let parsedResponse = try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as! [String:AnyObject]
+            if let response = parsedResponse["results"] as? [[String: AnyObject]]{
+                let students = StudentInfo.studentsFromDictionary(response)
+                completionHandler(result: students, error: "success")
+                return
+            }
         }
         task.resume()
     }

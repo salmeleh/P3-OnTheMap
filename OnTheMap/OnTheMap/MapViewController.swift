@@ -36,11 +36,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     self.studentLocations = result!
                     self.generateAnnotations()
                     self.mapView.addAnnotations(self.annotations)
-                    print("data loaded")
                 }
             } else {
                 print(error!)
-                print("data not loaded")
             }
         }
     }
