@@ -79,11 +79,6 @@ class LoginViewController: UIViewController {
     func launchAlertController(error: String) {
         let alertController = UIAlertController(title: "", message: error, preferredStyle: .Alert)
         
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
-//            // ...
-//        }
-//        alertController.addAction(cancelAction)
-        
         let OKAction = UIAlertAction(title: "Dismiss", style: .Default) { (action) in
             self.dismissViewControllerAnimated(true, completion: nil)
         }
