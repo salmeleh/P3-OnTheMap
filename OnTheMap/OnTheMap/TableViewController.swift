@@ -118,6 +118,14 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
 
     
+    @IBAction func refreshButtonPressed(sender: AnyObject) {
+        
+    }
+    
+    
+    
+    
+    
     /* shows alert view with error */
     func launchAlertController(error: String) {
         let alertController = UIAlertController(title: "", message: error, preferredStyle: .Alert)

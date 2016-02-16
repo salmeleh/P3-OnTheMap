@@ -30,12 +30,39 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     var pinAnnotationView:MKPinAnnotationView!
     
     
+    
+    var tapRecognizer: UITapGestureRecognizer? = nil
+    
+    /* Based on student comments, this was added to help with smaller resolution devices */
+    var keyboardAdjusted = false
+    var lastKeyboardOffset : CGFloat = 0.0
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        initialView()
+        tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+        tapRecognizer?.numberOfTapsRequired = 1
         
+        initialView()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.addKeyboardDismissRecognizer()
+        self.subscribeToKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.removeKeyboardDismissRecognizer()
+        self.unsubscribeToKeyboardNotifications()
+    }
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -59,13 +86,20 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     
     
     @IBAction func submitButtonPressed(sender: AnyObject) {
-    
-    
+        let locationString = locationTextField.text!
+        let linkString = linkTextField.text!
+        
+        if linkString == "" {
+            launchAlertController("Please enter a link")
+        } else {
+            ParseClient.sharedInstance().postStudentLocation(locationString, mediaURL: linkString, completionHandler: handlerForSubmit)
+        }
+        
     }
    
     
     
-    func mapCode (completionHandler: ((success: Bool, message: String, error: NSError?) -> Void)) {
+    func mapCode (completionHandler: ((success: Bool, message: String, error: String?) -> Void)) {
         searchRequest = MKLocalSearchRequest()
         searchRequest.naturalLanguageQuery = locationTextField.text
         search = MKLocalSearch(request: searchRequest)
@@ -93,12 +127,24 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     
     
     
-    func handlerForMapCode(success: Bool, message: String, error: NSError?) -> Void {
+    func handlerForMapCode(success: Bool, message: String, error: String?) -> Void {
         if success {
             return
         }
         else {
             launchAlertController(message)
+        }
+        
+    }
+    
+    
+    
+    func handlerForSubmit(success: Bool) -> Void {
+        if success {
+            dismissViewControllerAnimated(true, completion: nil)
+        }
+        else {
+            launchAlertController("Posting failed")
         }
         
     }
@@ -130,6 +176,18 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if textField == self.locationTextField {
+            submitButtonPressed(UIButton)
+        }
+        
+        return true
+    }
+
+    
+    
+    
+    
     
     /* shows alert view with error */
     func launchAlertController(error: String) {
@@ -144,6 +202,55 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
             
         }
     }
+    
+    
+    //MARK: keyboard methods
+    
+    func addKeyboardDismissRecognizer() {
+        self.view.addGestureRecognizer(tapRecognizer!)
+    }
+    
+    func removeKeyboardDismissRecognizer() {
+        self.view.removeGestureRecognizer(tapRecognizer!)
+    }
+    
+    func handleSingleTap(recognizer: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    func subscribeToKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func unsubscribeToKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        
+//        if keyboardAdjusted == false {
+//            lastKeyboardOffset = getKeyboardHeight(notification) / 2
+//            self.view.superview?.frame.origin.y -= lastKeyboardOffset
+//            keyboardAdjusted = true
+//        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        
+        if keyboardAdjusted == true {
+            self.view.superview?.frame.origin.y += lastKeyboardOffset
+            keyboardAdjusted = false
+        }
+    }
+    
+    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        return keyboardSize.CGRectValue().height
+    }
+    
+    
     
     
     

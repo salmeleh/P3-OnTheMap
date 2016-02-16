@@ -103,6 +103,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     
+    @IBAction func refreshButtonPressed(sender: AnyObject) {
+    }
+    
+    
+    
+    
+    
+    
     
     // MARK: MKMapViewDelegate
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {

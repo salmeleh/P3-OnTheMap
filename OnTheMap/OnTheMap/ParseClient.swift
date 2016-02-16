@@ -61,14 +61,14 @@ class ParseClient : NSObject {
         request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        request.HTTPBody = "{\"uniqueKey\": \"\(ParseClient.JSONBodyKeys.UniqueKey)\", \"firstName\": \"\(ParseClient.JSONBodyKeys.FirstName)\", \"lastName\": \"\(ParseClient.JSONBodyKeys.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(ParseClient.JSONBodyKeys.Latitude), \"longitude\": \(ParseClient.JSONBodyKeys.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
+        request.HTTPBody = "{\"uniqueKey\": \"\(UdacityClient.User.UniqueKey!)\", \"firstName\": \"\(UdacityClient.User.FirstName)\", \"lastName\": \"\(UdacityClient.User.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(UdacityClient.User.Latitude), \"longitude\": \(UdacityClient.User.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil {
                 completionHandler(success: false)
             }
-            print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+            print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
             completionHandler(success: true)
         }
         task.resume()
@@ -86,7 +86,7 @@ class ParseClient : NSObject {
         request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        request.HTTPBody = "{\"uniqueKey\": \"\(ParseClient.JSONBodyKeys.UniqueKey)\", \"firstName\": \"\(ParseClient.JSONBodyKeys.FirstName)\", \"lastName\": \"\(ParseClient.JSONBodyKeys.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(ParseClient.JSONBodyKeys.Latitude), \"longitude\": \(ParseClient.JSONBodyKeys.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
+        request.HTTPBody = "{\"uniqueKey\": \"\(UdacityClient.User.UniqueKey!)\", \"firstName\": \"\(UdacityClient.User.FirstName)\", \"lastName\": \"\(UdacityClient.User.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(UdacityClient.User.Latitude), \"longitude\": \(UdacityClient.User.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in

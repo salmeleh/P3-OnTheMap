@@ -56,7 +56,7 @@
                                     <constraint firstAttribute="width" constant="200" id="tXr-Sd-0L8"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="7Uv-9D-Huc"/>
@@ -163,7 +163,11 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem title="Refresh" id="Osp-hg-neA"/>
+                            <barButtonItem title="Refresh" id="Osp-hg-neA">
+                                <connections>
+                                    <action selector="refreshButtonPressed:" destination="hOJ-sV-YKO" id="ckt-Mo-PoV"/>
+                                </connections>
+                            </barButtonItem>
                             <barButtonItem title="Drop Pin" id="UEw-jm-Q9d">
                                 <connections>
                                     <segue destination="CUF-3T-I3T" kind="show" id="GrW-3H-Lvo"/>
@@ -277,7 +281,11 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem title="Refresh" id="hv5-R7-TTv"/>
+                            <barButtonItem title="Refresh" id="hv5-R7-TTv">
+                                <connections>
+                                    <action selector="refreshButtonPressed:" destination="gms-dZ-Jaa" id="0W4-4H-L6D"/>
+                                </connections>
+                            </barButtonItem>
                             <barButtonItem title="Drop Pin" id="DyY-bz-fNE">
                                 <connections>
                                     <segue destination="CUF-3T-I3T" kind="show" id="dVE-Ma-ghb"/>
@@ -349,7 +357,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="enter your link here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fTQ-Qf-Yse">
                                 <rect key="frame" x="200" y="109" width="200" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="URL"/>
                             </textField>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="2Mk-Cg-h7v">
                                 <rect key="frame" x="180" y="362" width="240" height="128"/>
