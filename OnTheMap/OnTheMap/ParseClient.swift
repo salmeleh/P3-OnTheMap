@@ -55,13 +55,14 @@ class ParseClient : NSObject {
     
     //MARK: taskForPostMethod
     func postStudentLocation(mapString: String, mediaURL: String, completionHandler: (success: Bool) -> Void) {
+        print("taskForPostMethod init")
         let request = NSMutableURLRequest(URL: NSURL(string: "\(ParseClient.Constants.baseSecureURL)")!)
         request.HTTPMethod = "POST"
         request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        request.HTTPBody = "{\"uniqueKey\": \"\(UdacityClient.User.UniqueKey!)\", \"firstName\": \"\(UdacityClient.User.FirstName)\", \"lastName\": \"\(UdacityClient.User.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(UdacityClient.User.Latitude), \"longitude\": \(UdacityClient.User.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
+        request.HTTPBody = "{\"uniqueKey\": \"\(UdacityClient.User.UniqueKey)\", \"firstName\": \"\(UdacityClient.User.FirstName)\", \"lastName\": \"\(UdacityClient.User.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(UdacityClient.User.Latitude), \"longitude\": \(UdacityClient.User.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in

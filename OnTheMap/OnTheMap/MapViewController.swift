@@ -104,6 +104,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     @IBAction func refreshButtonPressed(sender: AnyObject) {
+        loadData()
     }
     
     

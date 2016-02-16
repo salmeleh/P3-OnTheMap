@@ -119,7 +119,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     
     @IBAction func refreshButtonPressed(sender: AnyObject) {
-        
+        loadData()
     }
     
     
