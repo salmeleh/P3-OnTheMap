@@ -10,25 +10,52 @@ import UIKit
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
 
+    var studentInfo: [StudentInfo] = []
     
-    var studentInfo = [StudentInfo]()
+    @IBOutlet var tableView: UITableView!
     
-    private struct studentCellData {
-        var name: String?
-        var URL: String?
-    }
-    
-    private var studentCellDataArray = [studentCellData]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        loadData()
+    }
+    
+    
+    func loadData() {
+        ParseClient.sharedInstance().getStudentLocations() { (result, error) in
+            if result != nil {
+                dispatch_async(dispatch_get_main_queue()) {
+                    
+                    self.studentInfo = result!
+                    self.tableView.reloadData()
+                }
+            } else {
+                print(error!)
+            }
+        }
+    }
+    
     
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let studentData = studentInfo[indexPath.row]
+        let studentURL = studentData.mediaURL
+        
+        if studentURL.rangeOfString("http") != nil {
+            UIApplication.sharedApplication().openURL(NSURL(string: "\(studentURL)")!)
+        } else {
+            launchAlertController("Invalid URL")
+        }
         
     }
     
@@ -36,19 +63,21 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("studentInfo", forIndexPath: indexPath) as UITableViewCell
+        let cellReuseIdentifier = "studentInfoCell"
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as UITableViewCell!
         
-        //Configure the cell
-        let info = studentCellDataArray[indexPath.row]
-        cell.textLabel?.text = info.name
-        cell.detailTextLabel?.text = info.URL
+        let studentData = studentInfo[indexPath.row]
+
+        cell.textLabel!.text = studentData.firstName + " " + studentData.lastName
+        cell.detailTextLabel!.text = studentData.mediaURL
+        
         
         return cell
     }
     
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return studentCellDataArray.count
+            return studentInfo.count
     }
     
     
@@ -87,7 +116,28 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
+
+    
+    /* shows alert view with error */
+    func launchAlertController(error: String) {
+        let alertController = UIAlertController(title: "", message: error, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "Dismiss", style: .Default) { (action) in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            
+        }
+    }
+    
+    
+    
     
     
 }
+
+
+
 

@@ -47,7 +47,23 @@ extension UdacityClient {
         static let LastName = "last_name"
     }
 
-    
+    struct User {
+        static var Email : String?
+        static var Password : String?
+        static var UniqueKey : String?
+        
+        static var LastName : String?
+        static var FirstName : String?
+        
+        static var MediaURL : String?
+        static var MapString : String?
+        static var Latitude : Double?
+        static var Longitude : Double?
+        static var UpdatedAt : String?
+        static var ObjectId : String?
+        static var CreatedAt : String?
+    }
+
     
     
 }

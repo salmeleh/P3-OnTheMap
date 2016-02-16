@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15E33e" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OSe-Ic-bmU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15E39d" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OSe-Ic-bmU">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -238,12 +238,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="ThJ-IZ-qhU">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="studentInfoCell" textLabel="MBb-tx-Ljy" detailTextLabel="vMk-yw-8s6" style="IBUITableViewCellStyleSubtitle" id="ThJ-IZ-qhU">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ThJ-IZ-qhU" id="Dny-oM-Ts8">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MBb-tx-Ljy">
+                                            <rect key="frame" x="15" y="5" width="32" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vMk-yw-8s6">
+                                            <rect key="frame" x="15" y="25" width="41" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -270,6 +286,9 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="tableView" destination="EcZ-gF-7F4" id="g4O-8f-rMT"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B3z-hr-avr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -312,7 +331,7 @@
                                     <action selector="findButtonPressed:" destination="GIL-Sf-q4z" eventType="touchUpInside" id="aee-B3-hng"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kF1-Ib-9e4">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="enter your location here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kF1-Ib-9e4">
                                 <rect key="frame" x="200" y="170" width="200" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="c1u-hG-FLn"/>
@@ -323,12 +342,18 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCS-0i-Zb2">
                                 <rect key="frame" x="276" y="498" width="49" height="30"/>
                                 <state key="normal" title="Submit"/>
+                                <connections>
+                                    <action selector="submitButtonPressed:" destination="GIL-Sf-q4z" eventType="touchUpInside" id="io5-25-pOv"/>
+                                </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fTQ-Qf-Yse">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="enter your link here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fTQ-Qf-Yse">
                                 <rect key="frame" x="200" y="109" width="200" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="2Mk-Cg-h7v">
+                                <rect key="frame" x="180" y="362" width="240" height="128"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -342,6 +367,7 @@
                             <constraint firstItem="gbC-Q5-xbt" firstAttribute="top" secondItem="3d7-A6-luS" secondAttribute="bottom" constant="8" id="K79-bb-eHo"/>
                             <constraint firstItem="gbC-Q5-xbt" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="TWK-Ka-9e4"/>
                             <constraint firstItem="kF1-Ib-9e4" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="Y4g-4q-S7a"/>
+                            <constraint firstItem="2Mk-Cg-h7v" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="aVp-e4-bTj"/>
                             <constraint firstItem="fTQ-Qf-Yse" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="eZk-ln-H2Q"/>
                             <constraint firstItem="I98-Nc-SJ2" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="hAS-Xd-6f7"/>
                             <constraint firstItem="OCS-0i-Zb2" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="hHD-bZ-fNe"/>
@@ -363,6 +389,7 @@
                         <outlet property="labelTwo" destination="I98-Nc-SJ2" id="XuY-az-JTH"/>
                         <outlet property="linkTextField" destination="fTQ-Qf-Yse" id="Z6P-CJ-4fu"/>
                         <outlet property="locationTextField" destination="kF1-Ib-9e4" id="jhx-7Q-pwT"/>
+                        <outlet property="mapView" destination="2Mk-Cg-h7v" id="QZf-nf-a70"/>
                         <outlet property="submitButton" destination="OCS-0i-Zb2" id="bWp-g7-jBG"/>
                     </connections>
                 </viewController>

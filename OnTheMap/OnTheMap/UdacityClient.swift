@@ -122,6 +122,12 @@ class UdacityClient : NSObject {
     }
     
     
+    //func logout(completionHandler: ((success: Bool, message: String, error: NSError?) -> Void)) {
+    //
+    //}
+    
+    
+    
     /* Raw JSON -> useable object */
     class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: String?) -> Void){
         

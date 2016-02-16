@@ -60,17 +60,46 @@ class ParseClient : NSObject {
         request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
         request.HTTPBody = "{\"uniqueKey\": \"\(ParseClient.JSONBodyKeys.UniqueKey)\", \"firstName\": \"\(ParseClient.JSONBodyKeys.FirstName)\", \"lastName\": \"\(ParseClient.JSONBodyKeys.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(ParseClient.JSONBodyKeys.Latitude), \"longitude\": \(ParseClient.JSONBodyKeys.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil {
-                return
+                completionHandler(success: false)
             }
             print(NSString(data: data!, encoding: NSUTF8StringEncoding))
+            completionHandler(success: true)
         }
         task.resume()
     }
+    
+    
+    
+    //MARK: taskForPutMethod
+    func putStudentLocation(objectId: String, mapString: String, mediaURL: String, completionHandler: (success: Bool) -> Void) {
+        let urlString = "\(ParseClient.Constants.baseSecureURL)/\(objectId)"
+        let url = NSURL(string: urlString)
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "PUT"
+        request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        request.HTTPBody = "{\"uniqueKey\": \"\(ParseClient.JSONBodyKeys.UniqueKey)\", \"firstName\": \"\(ParseClient.JSONBodyKeys.FirstName)\", \"lastName\": \"\(ParseClient.JSONBodyKeys.LastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(ParseClient.JSONBodyKeys.Latitude), \"longitude\": \(ParseClient.JSONBodyKeys.Longitude)}".dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            if error != nil {
+                completionHandler(success: false)
+            } else {
+                completionHandler(success: true)
+            }
+        }
+        task.resume()
+    }
+
+    
     
     
     
