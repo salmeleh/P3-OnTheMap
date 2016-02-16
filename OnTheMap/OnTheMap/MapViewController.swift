@@ -28,7 +28,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func loadData() {
-        print("func loadData called")
         ParseClient.sharedInstance().getStudentLocations() { (result, error) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
