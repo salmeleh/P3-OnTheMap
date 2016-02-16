@@ -67,7 +67,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     
     func mapCode (completionHandler: ((success: Bool, message: String, error: NSError?) -> Void)) {
         searchRequest = MKLocalSearchRequest()
-        searchRequest.naturalLanguageQuery = linkTextField.text
+        searchRequest.naturalLanguageQuery = locationTextField.text
         search = MKLocalSearch(request: searchRequest)
         
         search.startWithCompletionHandler { (localSearchResponse, error) -> Void in
@@ -95,7 +95,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     
     func handlerForMapCode(success: Bool, message: String, error: NSError?) -> Void {
         if success {
-            thirdView()
+            return
         }
         else {
             launchAlertController(message)
@@ -126,7 +126,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     }
     
     func thirdView() {
-        print("thirdView init")
+        
     }
     
     
