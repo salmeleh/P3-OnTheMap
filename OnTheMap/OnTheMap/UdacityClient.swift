@@ -38,26 +38,6 @@ class UdacityClient : NSObject {
                 return
             }
             
-//            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-//                if let response = response as? NSHTTPURLResponse {
-//                    let userInfo = [NSLocalizedDescriptionKey: "Request returned an invalid respons. Status code: \(response.statusCode)!"]
-//                    completionHandler(result: nil, error: NSError(domain: "taskForGetMethod", code: 1, userInfo: userInfo))
-//                } else if let response = response {
-//                    let userInfo = [NSLocalizedDescriptionKey: "Request returned an invalid response. Response: \(response)!"]
-//                    completionHandler(result: nil, error: NSError(domain: "taskForGetMethod", code: 1, userInfo: userInfo))
-//                } else {
-//                    let userInfo = [NSLocalizedDescriptionKey: "Request returned an invalid response"]
-//                    completionHandler(result: nil, error: NSError(domain: "taskForGetMethod", code: 1, userInfo: userInfo))
-//                }
-//                return
-//            }
-//            
-//            guard let data = data else {
-//                let userInfo = [NSLocalizedDescriptionKey: "No data was returned by the request"]
-//                completionHandler(result: nil, error: NSError(domain: "taskForGetMethod", code: 1, userInfo: userInfo))
-//                return
-//            }
-            
             let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
             UdacityClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
         }
@@ -92,26 +72,6 @@ class UdacityClient : NSObject {
                 print("No data was returned by the request")
                 return
             }
-            
-//            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-//                if let response = response as? NSHTTPURLResponse {
-//                    let userInfo = [NSLocalizedDescriptionKey: "Your request returned an invalid response. Status code: \(response.statusCode)!"]
-//                    completionHandler(result: nil, error: NSError(domain: "taskForPostMethod", code: 1, userInfo: userInfo))
-//                } else if let response = response {
-//                    let userInfo = [NSLocalizedDescriptionKey: "Your request returned an invalid response. Response: \(response)!"]
-//                    completionHandler(result: nil, error: NSError(domain: "taskForPostMethod", code: 1, userInfo: userInfo))
-//                } else {
-//                    let userInfo = [NSLocalizedDescriptionKey: "Your request returned an invalid response"]
-//                    completionHandler(result: nil, error: NSError(domain: "taskForPostMethod'", code: 1, userInfo: userInfo))
-//                }
-//                return
-//            }
-//            
-//            guard let data = data else {
-//                let userInfo = [NSLocalizedDescriptionKey: "No data was returned by the request"]
-//                completionHandler(result: nil, error: NSError(domain: "taskForPostMethod", code: 1, userInfo: userInfo))
-//                return
-//            }
 
             let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
             UdacityClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)

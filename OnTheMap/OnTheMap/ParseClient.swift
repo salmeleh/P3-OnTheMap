@@ -67,11 +67,10 @@ class ParseClient : NSObject {
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil || response == "error" {
+            if error != nil {
                 completionHandler(success: false)
             }
             print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
-            print(error)
             print("post succeeded")
             completionHandler(success: true)
         }
