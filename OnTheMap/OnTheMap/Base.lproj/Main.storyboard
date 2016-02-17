@@ -410,10 +410,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="map" width="25" height="25"/>
-        <image name="pin" width="25" height="25"/>
+        <image name="map" width="50" height="50"/>
+        <image name="pin" width="50" height="50"/>
         <image name="second" width="30" height="30"/>
-        <image name="table" width="25" height="25"/>
+        <image name="table" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="GrW-3H-Lvo"/>
