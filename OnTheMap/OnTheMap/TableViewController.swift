@@ -31,14 +31,27 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     func loadData() {
+        //start loading animation
+        let activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        activityView.center = view.center
+        activityView.startAnimating()
+        view.addSubview(activityView)
+        
         ParseClient.sharedInstance().getStudentLocations() { (result, error) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
+                    //stop loading animation
+                    activityView.stopAnimating()
+                    activityView.removeFromSuperview()
                     
                     self.studentInfo = result!
                     self.tableView.reloadData()
                 }
             } else {
+                //stop loading animation
+                activityView.stopAnimating()
+                activityView.removeFromSuperview()
+                
                 print(error!)
             }
         }

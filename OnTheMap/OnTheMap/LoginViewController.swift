@@ -106,7 +106,7 @@ class LoginViewController: UIViewController {
             loginButton.hidden = true
 
         
-            //loading animation
+            //start loading animation
             let activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
             activityView.center = view.center
             activityView.startAnimating()
@@ -117,11 +117,12 @@ class LoginViewController: UIViewController {
                 if let sessionID = sessionID {
     
                     dispatch_async(dispatch_get_main_queue(), {
+                        //stop loading animation
                         activityView.stopAnimating()
                         activityView.removeFromSuperview()
                         
                         //success
-                        print("sessionID = \(sessionID)")
+                        print("succesfully logged in. sessionID: \(sessionID)")
                         UdacityClient.sharedInstance().sessionID = sessionID
                         
                         //complete login
