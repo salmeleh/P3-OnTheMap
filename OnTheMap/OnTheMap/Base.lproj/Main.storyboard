@@ -155,7 +155,7 @@
                             <constraint firstItem="dig-s1-H0h" firstAttribute="leading" secondItem="bht-qy-GH8" secondAttribute="leadingMargin" constant="-20" id="gF0-uG-Dvp"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" image="first" id="QCU-P0-T2B"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map" id="QCU-P0-T2B"/>
                     <navigationItem key="navigationItem" id="5US-rw-e46">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="7o3-Bu-Qde">
                             <connections>
@@ -163,12 +163,12 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem title="Refresh" id="Osp-hg-neA">
+                            <barButtonItem systemItem="refresh" id="Osp-hg-neA">
                                 <connections>
                                     <action selector="refreshButtonPressed:" destination="hOJ-sV-YKO" id="ckt-Mo-PoV"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Drop Pin" id="UEw-jm-Q9d">
+                            <barButtonItem image="pin" id="UEw-jm-Q9d">
                                 <connections>
                                     <segue destination="CUF-3T-I3T" kind="show" id="GrW-3H-Lvo"/>
                                 </connections>
@@ -187,7 +187,7 @@
         <scene sceneID="AX2-QD-1Ib">
             <objects>
                 <navigationController id="jRr-OY-ORW" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Map" image="first" id="Cd5-fX-wi4"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map" id="Cd5-fX-wi4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="S2p-C5-kaC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -204,7 +204,7 @@
         <scene sceneID="tIi-Gi-ZWh">
             <objects>
                 <navigationController id="Bd6-jK-RvF" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="List" image="second" id="vtx-hc-zOO"/>
+                    <tabBarItem key="tabBarItem" title="List" image="table" id="vtx-hc-zOO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="S5e-ff-K7d">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -332,7 +332,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wC1-Mm-Izc">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wC1-Mm-Izc">
                                 <rect key="frame" x="245" y="498" width="111" height="30"/>
                                 <state key="normal" title="Find on the Map"/>
                                 <connections>
@@ -347,7 +347,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCS-0i-Zb2">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCS-0i-Zb2">
                                 <rect key="frame" x="276" y="498" width="49" height="30"/>
                                 <state key="normal" title="Submit"/>
                                 <connections>
@@ -386,7 +386,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Pep-3Q-avd">
-                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="KPC-tK-AWM">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="KPC-tK-AWM">
                             <connections>
                                 <action selector="cancelButtonPressed:" destination="GIL-Sf-q4z" id="OgV-qf-kig"/>
                             </connections>
@@ -410,10 +410,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
+        <image name="map" width="25" height="25"/>
+        <image name="pin" width="25" height="25"/>
         <image name="second" width="30" height="30"/>
+        <image name="table" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dVE-Ma-ghb"/>
+        <segue reference="GrW-3H-Lvo"/>
     </inferredMetricsTieBreakers>
 </document>
