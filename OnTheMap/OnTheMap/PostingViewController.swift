@@ -85,19 +85,6 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    @IBAction func submitButtonPressed(sender: AnyObject) {
-        let locationString = locationTextField.text!
-        let linkString = linkTextField.text!
-        
-        if linkString == "" {
-            launchAlertController("Please enter a link")
-        } else {
-            ParseClient.sharedInstance().postStudentLocation(locationString, mediaURL: linkString, completionHandler: handlerForSubmit)
-        }
-        
-    }
-   
-    
     
     func mapCode (completionHandler: ((success: Bool, message: String, error: String?) -> Void)) {
         searchRequest = MKLocalSearchRequest()
@@ -136,6 +123,26 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
         }
         
     }
+
+    
+    
+    
+    @IBAction func submitButtonPressed(sender: AnyObject) {
+        let locationString = locationTextField.text!
+        let linkString = linkTextField.text!
+        let objectID = UdacityClient.User.ObjectId
+        
+        if linkString == "" {
+            launchAlertController("Please enter a link")
+        } else {
+            if objectID != nil {
+                ParseClient.sharedInstance().putStudentLocation(objectID!, mapString: locationString, mediaURL: linkString, completionHandler: handlerForSubmit)
+            } else {
+                ParseClient.sharedInstance().postStudentLocation(locationString, mediaURL: linkString, completionHandler: handlerForSubmit)
+            }
+        }
+        
+    }
     
     
     
@@ -146,8 +153,8 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
         else {
             launchAlertController("Posting failed")
         }
-        
     }
+    
     
     
 

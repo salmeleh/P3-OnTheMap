@@ -360,7 +360,7 @@
                                 <textInputTraits key="textInputTraits" keyboardType="URL"/>
                             </textField>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="2Mk-Cg-h7v">
-                                <rect key="frame" x="180" y="362" width="240" height="128"/>
+                                <rect key="frame" x="0.0" y="154" width="600" height="336"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -377,9 +377,11 @@
                             <constraint firstItem="kF1-Ib-9e4" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="Y4g-4q-S7a"/>
                             <constraint firstItem="2Mk-Cg-h7v" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="aVp-e4-bTj"/>
                             <constraint firstItem="fTQ-Qf-Yse" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="eZk-ln-H2Q"/>
+                            <constraint firstItem="2Mk-Cg-h7v" firstAttribute="leading" secondItem="eI3-US-zoN" secondAttribute="leadingMargin" constant="-20" id="h2g-dX-4op"/>
                             <constraint firstItem="I98-Nc-SJ2" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="hAS-Xd-6f7"/>
                             <constraint firstItem="OCS-0i-Zb2" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="hHD-bZ-fNe"/>
                             <constraint firstItem="wC1-Mm-Izc" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="oTS-5b-UVn"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="2Mk-Cg-h7v" secondAttribute="trailing" constant="-20" id="rG9-x4-LoQ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Pep-3Q-avd">

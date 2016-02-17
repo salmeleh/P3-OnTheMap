@@ -56,6 +56,7 @@ class ParseClient : NSObject {
     //MARK: taskForPostMethod
     func postStudentLocation(mapString: String, mediaURL: String, completionHandler: (success: Bool) -> Void) {
         print("taskForPostMethod init")
+        
         let request = NSMutableURLRequest(URL: NSURL(string: "\(ParseClient.Constants.baseSecureURL)")!)
         request.HTTPMethod = "POST"
         request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
@@ -66,10 +67,12 @@ class ParseClient : NSObject {
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil {
+            if error != nil || response == "error" {
                 completionHandler(success: false)
             }
             print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
+            print(error)
+            print("post succeeded")
             completionHandler(success: true)
         }
         task.resume()
@@ -79,6 +82,8 @@ class ParseClient : NSObject {
     
     //MARK: taskForPutMethod
     func putStudentLocation(objectId: String, mapString: String, mediaURL: String, completionHandler: (success: Bool) -> Void) {
+        print("taskForPutMethod init")
+
         let urlString = "\(ParseClient.Constants.baseSecureURL)/\(objectId)"
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
@@ -93,8 +98,10 @@ class ParseClient : NSObject {
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil {
                 completionHandler(success: false)
+                print(error)
             } else {
                 completionHandler(success: true)
+                print("put succeeded")
             }
         }
         task.resume()
