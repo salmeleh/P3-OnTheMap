@@ -52,7 +52,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 activityView.stopAnimating()
                 activityView.removeFromSuperview()
                 
-                print(error!)
+                self.launchAlertController(error!)
             }
         }
     }

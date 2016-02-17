@@ -360,7 +360,7 @@
                                 <textInputTraits key="textInputTraits" keyboardType="URL"/>
                             </textField>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="2Mk-Cg-h7v">
-                                <rect key="frame" x="0.0" y="154" width="600" height="336"/>
+                                <rect key="frame" x="0.0" y="208" width="600" height="282"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -370,6 +370,7 @@
                             <constraint firstItem="kF1-Ib-9e4" firstAttribute="top" secondItem="ZoC-EM-1no" secondAttribute="bottom" constant="19" id="6Qq-X7-Ejc"/>
                             <constraint firstItem="8Cp-D1-qY3" firstAttribute="top" secondItem="OCS-0i-Zb2" secondAttribute="bottom" constant="28" id="7X4-bH-D1E"/>
                             <constraint firstItem="fTQ-Qf-Yse" firstAttribute="top" secondItem="3d7-A6-luS" secondAttribute="bottom" constant="45" id="9qh-pU-Vi4"/>
+                            <constraint firstItem="wC1-Mm-Izc" firstAttribute="top" secondItem="2Mk-Cg-h7v" secondAttribute="bottom" constant="8" id="G0m-0Y-vHu"/>
                             <constraint firstItem="I98-Nc-SJ2" firstAttribute="top" secondItem="gbC-Q5-xbt" secondAttribute="bottom" constant="8" id="IRi-50-ZFg"/>
                             <constraint firstItem="8Cp-D1-qY3" firstAttribute="top" secondItem="wC1-Mm-Izc" secondAttribute="bottom" constant="28" id="Ivl-Q4-nIU"/>
                             <constraint firstItem="gbC-Q5-xbt" firstAttribute="top" secondItem="3d7-A6-luS" secondAttribute="bottom" constant="8" id="K79-bb-eHo"/>

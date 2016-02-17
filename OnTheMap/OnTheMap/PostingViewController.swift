@@ -132,6 +132,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
         let linkString = linkTextField.text!
         let objectID = UdacityClient.User.ObjectId
         
+        
         if linkString == "" {
             launchAlertController("Please enter a link")
         } else {
@@ -183,6 +184,8 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == self.locationTextField {
             submitButtonPressed(UIButton)
@@ -212,7 +215,6 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     
     
     //MARK: keyboard methods
-    
     func addKeyboardDismissRecognizer() {
         self.view.addGestureRecognizer(tapRecognizer!)
     }
@@ -235,7 +237,6 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        
 //        if keyboardAdjusted == false {
 //            lastKeyboardOffset = getKeyboardHeight(notification) / 2
 //            self.view.superview?.frame.origin.y -= lastKeyboardOffset
