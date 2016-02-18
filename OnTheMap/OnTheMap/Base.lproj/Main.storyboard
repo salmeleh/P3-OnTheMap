@@ -64,11 +64,16 @@
                                     </mask>
                                 </variation>
                             </textField>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="yw7-xw-53s">
+                                <rect key="frame" x="282" y="281" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="6Jh-2n-lGd" firstAttribute="leading" secondItem="CkO-SH-DWW" secondAttribute="leadingMargin" constant="30" id="5jT-ie-Myu"/>
                             <constraint firstAttribute="trailingMargin" secondItem="CG3-cH-Ehj" secondAttribute="trailing" constant="30" id="D9a-De-yhh"/>
+                            <constraint firstItem="yw7-xw-53s" firstAttribute="centerY" secondItem="CkO-SH-DWW" secondAttribute="centerY" id="EC0-fE-Ynw"/>
                             <constraint firstItem="6Jh-2n-lGd" firstAttribute="top" secondItem="CG3-cH-Ehj" secondAttribute="bottom" constant="8" id="GCc-FK-SV6"/>
                             <constraint firstItem="CG3-cH-Ehj" firstAttribute="leading" secondItem="CkO-SH-DWW" secondAttribute="leadingMargin" constant="30" id="JND-5b-PYq"/>
                             <constraint firstItem="vv4-Np-zpJ" firstAttribute="leading" secondItem="CkO-SH-DWW" secondAttribute="leadingMargin" constant="30" id="MTK-py-wmb"/>
@@ -85,6 +90,7 @@
                             <constraint firstItem="CG3-cH-Ehj" firstAttribute="centerX" secondItem="CkO-SH-DWW" secondAttribute="centerX" id="kzr-Fa-BBc"/>
                             <constraint firstItem="vv4-Np-zpJ" firstAttribute="centerY" secondItem="CkO-SH-DWW" secondAttribute="centerY" id="mxd-vy-3r7"/>
                             <constraint firstItem="vv4-Np-zpJ" firstAttribute="top" secondItem="6Jh-2n-lGd" secondAttribute="bottom" constant="8" id="vZx-rE-2IL"/>
+                            <constraint firstItem="yw7-xw-53s" firstAttribute="centerX" secondItem="CkO-SH-DWW" secondAttribute="centerX" id="wJ7-oo-IiQ"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -104,6 +110,7 @@
                     <connections>
                         <outlet property="debugTextLabel" destination="C6C-fB-dOy" id="N9G-gA-dqT"/>
                         <outlet property="emailTextField" destination="CG3-cH-Ehj" id="iVd-3H-Ccu"/>
+                        <outlet property="loadingWheel" destination="yw7-xw-53s" id="v48-yk-mhc"/>
                         <outlet property="loginButton" destination="vv4-Np-zpJ" id="zoi-PK-OW6"/>
                         <outlet property="passwordTextField" destination="6Jh-2n-lGd" id="WOZ-F2-D22"/>
                     </connections>
@@ -146,13 +153,19 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dig-s1-H0h">
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                             </mapView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="qWA-Kc-HNq">
+                                <rect key="frame" x="282" y="281" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="dig-s1-H0h" secondAttribute="trailing" constant="-20" id="4gc-eG-MpX"/>
                             <constraint firstItem="sU8-bO-xmv" firstAttribute="top" secondItem="dig-s1-H0h" secondAttribute="bottom" id="8qR-Ql-yBm"/>
+                            <constraint firstItem="qWA-Kc-HNq" firstAttribute="centerX" secondItem="bht-qy-GH8" secondAttribute="centerX" id="Veo-Ul-XMm"/>
                             <constraint firstItem="dig-s1-H0h" firstAttribute="top" secondItem="wSg-pu-Xrf" secondAttribute="bottom" id="WK8-E3-Jw2"/>
                             <constraint firstItem="dig-s1-H0h" firstAttribute="leading" secondItem="bht-qy-GH8" secondAttribute="leadingMargin" constant="-20" id="gF0-uG-Dvp"/>
+                            <constraint firstItem="qWA-Kc-HNq" firstAttribute="centerY" secondItem="bht-qy-GH8" secondAttribute="centerY" id="h3x-le-guX"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map" id="QCU-P0-T2B"/>
@@ -176,6 +189,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="loadingWheel" destination="qWA-Kc-HNq" id="VFc-Su-Sfc"/>
                         <outlet property="mapView" destination="dig-s1-H0h" id="8As-cz-ehF"/>
                     </connections>
                 </viewController>
@@ -241,6 +255,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="w0v-h9-dA0">
+                            <rect key="frame" x="0.0" y="136" width="600" height="37"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="color" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </activityIndicatorView>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="studentInfoCell" textLabel="MBb-tx-Ljy" detailTextLabel="vMk-yw-8s6" style="IBUITableViewCellStyleSubtitle" id="ThJ-IZ-qhU">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
@@ -253,14 +272,14 @@
                                             <rect key="frame" x="15" y="5" width="32" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vMk-yw-8s6">
                                             <rect key="frame" x="15" y="25" width="41" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -295,6 +314,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="loadingWheel" destination="w0v-h9-dA0" id="NXM-A9-XY8"/>
                         <outlet property="tableView" destination="EcZ-gF-7F4" id="g4O-8f-rMT"/>
                     </connections>
                 </tableViewController>
@@ -410,12 +430,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="map" width="50" height="50"/>
-        <image name="pin" width="50" height="50"/>
+        <image name="map" width="25" height="25"/>
+        <image name="pin" width="25" height="25"/>
         <image name="second" width="30" height="30"/>
-        <image name="table" width="50" height="50"/>
+        <image name="table" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GrW-3H-Lvo"/>
+        <segue reference="dVE-Ma-ghb"/>
     </inferredMetricsTieBreakers>
 </document>

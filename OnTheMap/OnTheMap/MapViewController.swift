@@ -14,11 +14,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     var studentLocations: [StudentInfo] = []
     var annotations = [MKPointAnnotation]()
+    @IBOutlet weak var loadingWheel: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         
+        loadingWheel.hidesWhenStopped = true
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -28,18 +30,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func loadData() {
-        //start loading animation
-        let activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        activityView.center = view.center
-        activityView.startAnimating()
-        view.addSubview(activityView)
+        loadingWheel.startAnimating()
         
         ParseClient.sharedInstance().getStudentLocations() { (result, error) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
                     //stop loading animation
-                    activityView.stopAnimating()
-                    activityView.removeFromSuperview()
+                    self.loadingWheel.stopAnimating()
                     
                     
                     self.studentLocations = result!
@@ -48,8 +45,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 }
             } else {
                 //stop loading animation
-                activityView.stopAnimating()
-                activityView.removeFromSuperview()
+                self.loadingWheel.stopAnimating()
                 
                 print(error!)
             }
@@ -81,7 +77,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     @IBAction func logoutButtonPressed(sender: AnyObject) {
-
+        loadingWheel.startAnimating()
+        
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
         request.HTTPMethod = "DELETE"
         var xsrfCookie: NSHTTPCookie? = nil
@@ -95,6 +92,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
+            self.loadingWheel.stopAnimating()
+            
             if error != nil { // Handle error...
                 print("logoutButtonPressed error")
                 return
@@ -107,7 +106,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         task.resume()
         
         dispatch_async(dispatch_get_main_queue(), {
-            //creturn to login
+            //return to login
             let controller = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController")
             self.presentViewController(controller, animated: true, completion: nil)
         })

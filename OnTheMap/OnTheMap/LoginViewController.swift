@@ -15,6 +15,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var debugTextLabel: UILabel!
+    @IBOutlet weak var loadingWheel: UIActivityIndicatorView!
     
     
     var appDelegate: AppDelegate!
@@ -41,6 +42,9 @@ class LoginViewController: UIViewController {
         tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
         tapRecognizer?.numberOfTapsRequired = 1
         
+        loadingWheel.hidesWhenStopped = true
+
+        
     }
     
     
@@ -54,6 +58,8 @@ class LoginViewController: UIViewController {
         
         self.addKeyboardDismissRecognizer()
         self.subscribeToKeyboardNotifications()
+        
+        loadingWheel.hidden = true
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -104,49 +110,47 @@ class LoginViewController: UIViewController {
         } else {
         
             loginButton.hidden = true
-
         
             //start loading animation
-            let activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-            activityView.center = view.center
-            activityView.startAnimating()
-            view.addSubview(activityView)
+            loadingWheel.hidden = false
+            loadingWheel.startAnimating()
         
             //begin POST session
-            UdacityClient.sharedInstance().postASession(emailTextField.text!, password: passwordTextField.text!) {(sessionID, error) in
-                if let sessionID = sessionID {
-    
-                    dispatch_async(dispatch_get_main_queue(), {
-                        //stop loading animation
-                        activityView.stopAnimating()
-                        activityView.removeFromSuperview()
-                        
-                        //success
-                        print("succesfully logged in. sessionID: \(sessionID)")
-                        UdacityClient.sharedInstance().sessionID = sessionID
-                        
-                        //complete login
-                        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
-                        self.presentViewController(controller, animated: true, completion: nil)
-                    })
-                    
-                    
-                    
-                
-                    
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        activityView.stopAnimating()
-                        activityView.removeFromSuperview()
-                        self.loginButton.hidden = false
-                        self.launchAlertController("Invalid Credentials")
-                    })
-                    
-                }
-                
-            }
+            UdacityClient.sharedInstance().postASession(emailTextField.text!, password: passwordTextField.text!, completionHandler: handlerForLogin)
         }
     }
+    
+    
+    func handlerForLogin(success: Bool, error: String) -> Void {
+        if success {
+            completeLogin()
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue(), {
+                self.loadingWheel.stopAnimating()
+                self.loginButton.hidden = false
+                self.launchAlertController(error)
+            })
+        }
+    }
+    
+    
+    
+    func completeLogin() {
+        dispatch_async(dispatch_get_main_queue(), {
+            //stop loading animation
+            self.loadingWheel.stopAnimating()
+            
+//            //success
+//            print("succesfully logged in. sessionID: \(sessionID)")
+//            UdacityClient.sharedInstance().sessionID = sessionID
+            
+            //complete login
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapTabBarController") as! UITabBarController
+            self.presentViewController(controller, animated: true, completion: nil)
+        })
+    }
+
     
     
     
