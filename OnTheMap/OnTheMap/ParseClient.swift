@@ -56,6 +56,7 @@ class ParseClient : NSObject {
     //MARK: taskForPostMethod
     func postStudentLocation(mapString: String, mediaURL: String, completionHandler: (success: Bool) -> Void) {
         print("taskForPostMethod init")
+        print("UniqueKey: " + UdacityClient.User.UniqueKey!)
         
         let request = NSMutableURLRequest(URL: NSURL(string: "\(ParseClient.Constants.baseSecureURL)")!)
         request.HTTPMethod = "POST"
