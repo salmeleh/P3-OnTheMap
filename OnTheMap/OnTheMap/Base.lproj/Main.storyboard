@@ -352,7 +352,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wC1-Mm-Izc">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wC1-Mm-Izc">
                                 <rect key="frame" x="245" y="498" width="111" height="30"/>
                                 <state key="normal" title="Find on the Map"/>
                                 <connections>
@@ -367,7 +367,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCS-0i-Zb2">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCS-0i-Zb2">
                                 <rect key="frame" x="276" y="498" width="49" height="30"/>
                                 <state key="normal" title="Submit"/>
                                 <connections>
@@ -382,6 +382,10 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="2Mk-Cg-h7v">
                                 <rect key="frame" x="0.0" y="208" width="600" height="282"/>
                             </mapView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="jDH-Qf-TRT">
+                                <rect key="frame" x="282" y="281" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -393,7 +397,9 @@
                             <constraint firstItem="wC1-Mm-Izc" firstAttribute="top" secondItem="2Mk-Cg-h7v" secondAttribute="bottom" constant="8" id="G0m-0Y-vHu"/>
                             <constraint firstItem="I98-Nc-SJ2" firstAttribute="top" secondItem="gbC-Q5-xbt" secondAttribute="bottom" constant="8" id="IRi-50-ZFg"/>
                             <constraint firstItem="8Cp-D1-qY3" firstAttribute="top" secondItem="wC1-Mm-Izc" secondAttribute="bottom" constant="28" id="Ivl-Q4-nIU"/>
+                            <constraint firstItem="jDH-Qf-TRT" firstAttribute="centerY" secondItem="eI3-US-zoN" secondAttribute="centerY" id="J9c-EE-VKw"/>
                             <constraint firstItem="gbC-Q5-xbt" firstAttribute="top" secondItem="3d7-A6-luS" secondAttribute="bottom" constant="8" id="K79-bb-eHo"/>
+                            <constraint firstItem="jDH-Qf-TRT" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="LUe-5d-owi"/>
                             <constraint firstItem="gbC-Q5-xbt" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="TWK-Ka-9e4"/>
                             <constraint firstItem="kF1-Ib-9e4" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="Y4g-4q-S7a"/>
                             <constraint firstItem="2Mk-Cg-h7v" firstAttribute="centerX" secondItem="eI3-US-zoN" secondAttribute="centerX" id="aVp-e4-bTj"/>
@@ -419,6 +425,7 @@
                         <outlet property="labelThree" destination="ZoC-EM-1no" id="G7s-JD-q68"/>
                         <outlet property="labelTwo" destination="I98-Nc-SJ2" id="XuY-az-JTH"/>
                         <outlet property="linkTextField" destination="fTQ-Qf-Yse" id="Z6P-CJ-4fu"/>
+                        <outlet property="loadingWheel" destination="jDH-Qf-TRT" id="dzn-6r-NDX"/>
                         <outlet property="locationTextField" destination="kF1-Ib-9e4" id="jhx-7Q-pwT"/>
                         <outlet property="mapView" destination="2Mk-Cg-h7v" id="QZf-nf-a70"/>
                         <outlet property="submitButton" destination="OCS-0i-Zb2" id="bWp-g7-jBG"/>
