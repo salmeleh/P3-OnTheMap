@@ -27,7 +27,7 @@
                                     <constraint firstAttribute="width" constant="200" id="zTm-6u-O9Y"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="go" secureTextEntry="YES"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="W1I-9W-v41"/>
@@ -56,7 +56,7 @@
                                     <constraint firstAttribute="width" constant="200" id="tXr-Sd-0L8"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="7Uv-9D-Huc"/>
@@ -300,12 +300,12 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem title="Refresh" id="hv5-R7-TTv">
+                            <barButtonItem systemItem="refresh" id="hv5-R7-TTv">
                                 <connections>
                                     <action selector="refreshButtonPressed:" destination="gms-dZ-Jaa" id="0W4-4H-L6D"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Drop Pin" id="DyY-bz-fNE">
+                            <barButtonItem image="pin" id="DyY-bz-fNE">
                                 <connections>
                                     <segue destination="CUF-3T-I3T" kind="show" id="dVE-Ma-ghb"/>
                                 </connections>
@@ -365,7 +365,7 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="c1u-hG-FLn"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCS-0i-Zb2">
                                 <rect key="frame" x="276" y="498" width="49" height="30"/>
@@ -377,7 +377,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="enter your link here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fTQ-Qf-Yse">
                                 <rect key="frame" x="200" y="109" width="200" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="URL"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
                             </textField>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="2Mk-Cg-h7v">
                                 <rect key="frame" x="0.0" y="208" width="600" height="282"/>

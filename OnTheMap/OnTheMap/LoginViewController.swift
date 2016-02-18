@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Properties
     @IBOutlet weak var emailTextField: UITextField!
@@ -44,7 +44,8 @@ class LoginViewController: UIViewController {
         
         loadingWheel.hidesWhenStopped = true
 
-        
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
     

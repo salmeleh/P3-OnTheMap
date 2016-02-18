@@ -150,13 +150,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let userLink = view.annotation!.subtitle!
             let app = UIApplication.sharedApplication()
-            if userLink!.rangeOfString("http") != nil {
-                if let toOpen = view.annotation?.subtitle!{
-                    app.openURL(NSURL(string: toOpen)!)
-                }
-            } else {
-                launchAlertController("Invalid link")
-            }
+            app.openURL(NSURL(string: userLink!)!)
         }
     }
 

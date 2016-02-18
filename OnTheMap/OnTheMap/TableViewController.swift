@@ -60,13 +60,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let studentData = studentInfo[indexPath.row]
         let studentURL = studentData.mediaURL
-        
-        if studentURL.rangeOfString("http") != nil {
-            UIApplication.sharedApplication().openURL(NSURL(string: "\(studentURL)")!)
-        } else {
-            launchAlertController("Invalid URL")
-        }
-        
+        UIApplication.sharedApplication().openURL(NSURL(string: "\(studentURL)")!)        
     }
     
     
