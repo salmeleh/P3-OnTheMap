@@ -20,65 +20,67 @@ class UdacityClient : NSObject {
         super.init()
     }
 
-    /* GET */
-    func taskForGetMethod(method: String, completionHandler:(result: AnyObject!, error: String?) -> Void) -> NSURLSessionDataTask {
-        
-        let urlString = Constants.UdacityBaseURL + method
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        
-        let task = session.dataTaskWithRequest(request) {(data, response, error) in
-            
-            guard (error == nil) else {
-                completionHandler(result: nil, error: "Connection Error")
-                return
-            }
-            guard let data = data else {
-                print("No data was returned by the request")
-                return
-            }
-            
-            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-            UdacityClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
-        }
-        
-        task.resume()
-        return task
-    
-    }
     
     
-    /* POST */
-    func taskForPostMethod(method: String, jsonBody: [String: AnyObject], completionHandler: (result: AnyObject!, error: String?) -> Void) -> NSURLSessionDataTask {
+    //taskForPostMethod//
+    func postASession(email: String, password: String, completionHandler: (success: Bool, error: String) -> Void) -> NSURLSessionDataTask {
         
-        let urlString = Constants.UdacityBaseURL + method
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
+        let urlString = Constants.UdacityBaseURL + UdacityClient.Methods.Session
+        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.HTTPMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        do{
-            request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(jsonBody, options: .PrettyPrinted)
-        }
+        request.HTTPBody = "{\"udacity\": {\"username\": \"\(email)\", \"password\": \"\(password)\"}}".dataUsingEncoding(NSUTF8StringEncoding)
         
         let task = session.dataTaskWithRequest(request){ (data, response, error) in
             
             guard (error == nil) else {
-                completionHandler(result: nil, error: "Connection Error")
+                completionHandler(success: false, error: "Connection Error")
                 return
             }
             guard let data = data else {
-                print("No data was returned by the request")
+                completionHandler(success: false, error: "No data returned by request")
                 return
             }
 
-            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-            UdacityClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
+            UdacityClient.parseJSONForPostMethod(data, completionHandler: completionHandler)
         }
         
         task.resume()
         return task
+    }
+    
+    
+    
+    //getUserData//
+    func getUserData(key: String) {
+        
+        let urlString = UdacityClient.Constants.UdacityBaseURL + UdacityClient.Methods.Users + key
+        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            guard (error == nil) else {
+                print("Connection Error")
+                return
+            }
+            guard let data = data else {
+                print("No data was returned by the request!")
+                return
+            }
+            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
+            var parsedResponse = try! NSJSONSerialization.JSONObjectWithData(newData, options: NSJSONReadingOptions.AllowFragments) as! [String:AnyObject]
+            
+            guard let accountDictionary = parsedResponse["user"] as? NSDictionary else {
+                print("Cannot find keys 'account' in \(parsedResponse)")
+                return
+            }
+            let firstName = accountDictionary ["first_name"] as? String
+            UdacityClient.User.FirstName = firstName
+            let lastName = accountDictionary ["last_name"] as? String
+            UdacityClient.User.LastName = lastName
+        }
+        task.resume()
     }
     
     
@@ -89,15 +91,29 @@ class UdacityClient : NSObject {
     
     
     /* Raw JSON -> useable object */
-    class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: String?) -> Void){
-        
-        var parsedResult: AnyObject!
-        do {
-            parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
-        } catch {
-            completionHandler(result: nil, error: "Could not parse the data as JSON: '\(data)'")
+    class func parseJSONForPostMethod(data: NSData, completionHandler: (success: Bool, error: String) -> Void){
+        let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
+        var parsedResponse = try! NSJSONSerialization.JSONObjectWithData(newData, options: NSJSONReadingOptions.AllowFragments) as! [String:AnyObject]
+
+        guard let accountDictionary = parsedResponse["account"] as? NSDictionary else {
+            print("Cannot find keys 'account' in \(parsedResponse)")
+            return
         }
-        completionHandler(result: parsedResult, error: nil)
+        
+        let registered = accountDictionary ["registered"] as? Int
+        let user = accountDictionary ["key"] as? String
+        
+        if registered != 1 {
+            print("Account not registered")
+        }
+        if registered == 1 {
+            completionHandler(success: true, error: "")
+            UdacityClient.User.UniqueKey = user
+            UdacityClient.sharedInstance().getUserData(user!)
+        }
+
+        
+        
     }
     
     /* MARK -- Shared Instance */

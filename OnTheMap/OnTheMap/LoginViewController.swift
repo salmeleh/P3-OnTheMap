@@ -113,7 +113,7 @@ class LoginViewController: UIViewController {
             view.addSubview(activityView)
         
             //begin POST session
-            UdacityClient.sharedInstance().postSession(emailTextField.text!, password: passwordTextField.text!) {(sessionID, error) in
+            UdacityClient.sharedInstance().postASession(emailTextField.text!, password: passwordTextField.text!) {(sessionID, error) in
                 if let sessionID = sessionID {
     
                     dispatch_async(dispatch_get_main_queue(), {
