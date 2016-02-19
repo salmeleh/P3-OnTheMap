@@ -115,8 +115,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         task.resume()
         
         dispatch_async(dispatch_get_main_queue(), {
-            //creturn to login
-            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! UITabBarController
+            //return to login
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController")
             self.presentViewController(controller, animated: true, completion: nil)
         })
         
