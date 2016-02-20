@@ -14,10 +14,12 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     @IBOutlet var tableView: UITableView!
     
+    @IBOutlet weak var loadingWheel: UIActivityIndicatorView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadingWheel.hidesWhenStopped = true
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -32,25 +34,20 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func loadData() {
         //start loading animation
-        let activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        activityView.center = view.center
-        activityView.startAnimating()
-        view.addSubview(activityView)
+        loadingWheel.startAnimating()
         
         ParseClient.sharedInstance().getStudentLocations() { (result, error) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    //stop loading animation
-                    activityView.stopAnimating()
-                    activityView.removeFromSuperview()
+                    self.loadingWheel.stopAnimating()
                     
                     self.studentInfo = result!
                     self.tableView.reloadData()
                 }
             } else {
                 //stop loading animation
-                activityView.stopAnimating()
-                activityView.removeFromSuperview()
+                self.loadingWheel.stopAnimating()
+
                 
                 self.launchAlertController(error!)
             }
@@ -63,13 +60,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let studentData = studentInfo[indexPath.row]
         let studentURL = studentData.mediaURL
-        
-        if studentURL.rangeOfString("http") != nil {
-            UIApplication.sharedApplication().openURL(NSURL(string: "\(studentURL)")!)
-        } else {
-            launchAlertController("Invalid URL")
-        }
-        
+        UIApplication.sharedApplication().openURL(NSURL(string: "\(studentURL)")!)        
     }
     
     
@@ -97,7 +88,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
 
 
     @IBAction func logoutButtonPressed(sender: AnyObject) {
-        
+        loadingWheel.startAnimating()
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
         request.HTTPMethod = "DELETE"
         var xsrfCookie: NSHTTPCookie? = nil
@@ -111,6 +102,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
+            self.loadingWheel.stopAnimating()
+            
             if error != nil { // Handle error...
             return
             }
@@ -122,8 +115,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         task.resume()
         
         dispatch_async(dispatch_get_main_queue(), {
-            //creturn to login
-            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! UITabBarController
+            //return to login
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController")
             self.presentViewController(controller, animated: true, completion: nil)
         })
         

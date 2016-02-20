@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class PostingViewController: UIViewController, MKMapViewDelegate {
+class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var locationTextField: UITextField!
@@ -21,6 +21,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var labelThree: UILabel!
     
     @IBOutlet weak var linkTextField: UITextField!
+    @IBOutlet weak var loadingWheel: UIActivityIndicatorView!
     
     @IBOutlet weak var mapView: MKMapView!
     var searchRequest:MKLocalSearchRequest!
@@ -44,6 +45,12 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
         tapRecognizer?.numberOfTapsRequired = 1
+        loadingWheel.hidesWhenStopped = true
+        
+        
+        locationTextField.delegate = self
+        linkTextField.delegate = self
+        
         
         initialView()
     }
@@ -80,6 +87,9 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
         if locationTextField.text == "" {
             launchAlertController("Please enter a location")
         } else {
+            //hide keyboard?
+            
+            
             mapCode(handlerForMapCode)
         }
     }
@@ -87,6 +97,9 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     
     
     func mapCode (completionHandler: ((success: Bool, message: String, error: String?) -> Void)) {
+        loadingWheel.startAnimating()
+
+        
         searchRequest = MKLocalSearchRequest()
         searchRequest.naturalLanguageQuery = locationTextField.text
         search = MKLocalSearch(request: searchRequest)
@@ -107,6 +120,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
                 self.pinAnnotationView = MKPinAnnotationView(annotation: self.pointAnnotation, reuseIdentifier: nil)
                 self.mapView.addAnnotation(self.pinAnnotationView.annotation!)
                 
+                self.loadingWheel.stopAnimating()
                 completionHandler(success: true, message: "Successful", error: nil)
             }
         }
@@ -131,7 +145,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
         let locationString = locationTextField.text!
         let linkString = linkTextField.text!
         let objectID = UdacityClient.User.ObjectId
-        
+        loadingWheel.startAnimating()
         
         if linkString == "" {
             launchAlertController("Please enter a link")
@@ -142,6 +156,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
                 ParseClient.sharedInstance().postStudentLocation(locationString, mediaURL: linkString, completionHandler: handlerForSubmit)
             }
         }
+        loadingWheel.stopAnimating()
         
     }
     
@@ -188,9 +203,11 @@ class PostingViewController: UIViewController, MKMapViewDelegate {
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == self.locationTextField {
+            findButtonPressed(UIButton)
+        }
+        if textField == self.linkTextField {
             submitButtonPressed(UIButton)
         }
-        
         return true
     }
 
