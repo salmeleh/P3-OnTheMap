@@ -96,9 +96,7 @@ class UdacityClient : NSObject {
         var parsedResponse = try! NSJSONSerialization.JSONObjectWithData(newData, options: NSJSONReadingOptions.AllowFragments) as! [String:AnyObject]
 
         let error = parsedResponse["error"] as? String
-        
         if parsedResponse["error"] != nil {
-            print(error)
             completionHandler(success: false, error: error!)
             return
         }

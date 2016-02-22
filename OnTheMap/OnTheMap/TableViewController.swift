@@ -57,7 +57,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        
         let studentData = studentInfo[indexPath.row]
         let studentURL = studentData.mediaURL
         UIApplication.sharedApplication().openURL(NSURL(string: "\(studentURL)")!)        

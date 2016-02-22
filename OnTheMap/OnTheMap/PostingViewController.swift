@@ -162,12 +162,12 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
     
     
     
-    func handlerForSubmit(success: Bool) -> Void {
+    func handlerForSubmit(success: Bool, error: String) -> Void {
         if success {
             dismissViewControllerAnimated(true, completion: nil)
         }
         else {
-            launchAlertController("Posting failed")
+            launchAlertController(error)
         }
     }
     
