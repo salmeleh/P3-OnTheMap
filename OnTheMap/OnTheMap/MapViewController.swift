@@ -77,32 +77,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func logoutButtonPressed(sender: AnyObject) {
         loadingWheel.startAnimating()
+        UdacityClient.sharedInstance().logout(handlerForLogout)
+        self.loadingWheel.stopAnimating()
         
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-        request.HTTPMethod = "DELETE"
-        var xsrfCookie: NSHTTPCookie? = nil
-        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-        for cookie in sharedCookieStorage.cookies! {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
-        
-        }
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            self.loadingWheel.stopAnimating()
-            
-            if error != nil {
-                print("logoutButtonPressed error")
-                return
-            }
-            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5))
-            print(NSString(data: newData, encoding: NSUTF8StringEncoding)!)
-        }
-        
-        
-        task.resume()
         
         dispatch_async(dispatch_get_main_queue(), {
             //return to login
@@ -110,8 +87,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             self.presentViewController(controller, animated: true, completion: nil)
         })
         
-        
     }
+    
+    
+    func handlerForLogout(success: Bool, message: String, error: String){
+        if success {
+            return
+        } else {
+            launchAlertController(error)
+        }
+    }
+    
     
     
     
