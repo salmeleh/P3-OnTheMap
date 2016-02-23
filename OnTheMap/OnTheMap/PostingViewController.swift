@@ -89,6 +89,8 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         }
     }
     
+//    Correct your flow in this view: only change the view to get the URL if the geocoding is successfully done. Only dismiss this view if the posting is successfully done.
+    
     
     
     func mapCode (completionHandler: ((success: Bool, message: String, error: String?) -> Void)) {
@@ -103,6 +105,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
             if localSearchResponse == nil{
                 completionHandler(success: false, message: "Mapcode Failed", error: nil)
                 return
+                
             } else {
                 self.pointAnnotation = MKPointAnnotation()
                 self.pointAnnotation.title = self.locationTextField.text
