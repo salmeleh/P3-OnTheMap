@@ -43,10 +43,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     self.mapView.addAnnotations(self.annotations)
                 }
             } else {
-                //stop loading animation
                 self.loadingWheel.stopAnimating()
-                
-                print(error!)
+                self.launchAlertController(error!)
             }
         }
     }

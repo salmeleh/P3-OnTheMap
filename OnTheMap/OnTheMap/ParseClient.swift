@@ -26,6 +26,11 @@ class ParseClient : NSObject {
     
     //MARK: taskForGetMethod
     func getStudentLocations(completionHandler: (result: [StudentInfo]?, error: String?) -> Void) {
+        if(ParseClient.Constants.APIKey != "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY") {
+            completionHandler(result: nil, error: "Server error - incorrect API key")
+            return
+        }
+        
         let params = ["limit": 100, "order": "-updatedAt"]
         let urlString = ParseClient.Constants.baseSecureURL + ParseClient.escapedParameters(params)
         
@@ -40,7 +45,7 @@ class ParseClient : NSObject {
                 return
             }
             guard let data = data else {
-                print("No data was returned by the request!")
+                completionHandler(result: nil, error: "No data was returned")
                 return
             }
             let parsedResponse = try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as! [String:AnyObject]
@@ -57,8 +62,10 @@ class ParseClient : NSObject {
     
     //MARK: taskForPostMethod
     func postStudentLocation(mapString: String, mediaURL: String, completionHandler: (success: Bool, error: String) -> Void) {
-        print("taskForPostMethod init")
-        print("UniqueKey: " + UdacityClient.User.UniqueKey!)
+        if(ParseClient.Constants.APIKey != "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY") {
+            completionHandler(success: false, error: "Server error - incorrect API key")
+            return
+        }
         
         let request = NSMutableURLRequest(URL: NSURL(string: "\(ParseClient.Constants.baseSecureURL)")!)
         request.HTTPMethod = "POST"
@@ -75,10 +82,12 @@ class ParseClient : NSObject {
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
             
-            if error == nil {
-                completionHandler(success: false, error: String(error))
+            guard (error == nil) else {
+                completionHandler(success: false, error: "Connection Error")
                 return
             }
+            
+            
             print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
             print("post succeeded")
             completionHandler(success: true, error: "")
@@ -90,8 +99,11 @@ class ParseClient : NSObject {
     
     //MARK: taskForPutMethod
     func putStudentLocation(objectId: String, mapString: String, mediaURL: String, completionHandler: (success: Bool, error: String) -> Void) {
-        print("taskForPutMethod init")
-
+        if(ParseClient.Constants.APIKey != "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY") {
+            completionHandler(success: false, error: "Server error - incorrect API key")
+            return
+        }
+        
         let urlString = "\(ParseClient.Constants.baseSecureURL)/\(objectId)"
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)

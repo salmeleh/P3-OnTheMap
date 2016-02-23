@@ -38,20 +38,16 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
     var keyboardAdjusted = false
     var lastKeyboardOffset : CGFloat = 0.0
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
-        tapRecognizer?.numberOfTapsRequired = 1
-        loadingWheel.hidesWhenStopped = true
-        
+        tapRecognizer?.numberOfTapsRequired = 1        
         
         locationTextField.delegate = self
         linkTextField.delegate = self
         
-        
+        loadingWheel.hidesWhenStopped = true
         initialView()
     }
     
@@ -91,11 +87,9 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         }
     }
     
-//    Correct your flow in this view: only change the view to get the URL if the geocoding is successfully done. Only dismiss this view if the posting is successfully done.
-    
-    
     
     func mapCode (completionHandler: ((success: Bool, message: String, error: String?) -> Void)) {
+        loadingWheel.hidden = false
         loadingWheel.startAnimating()
 
         
@@ -116,7 +110,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
                 UdacityClient.User.Longitude = localSearchResponse!.boundingRegion.center.longitude
                 self.pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: UdacityClient.User.Latitude!, longitude: UdacityClient.User.Longitude!)
 
-                let span = MKCoordinateSpanMake(0.1, 0.1)
+                let span = MKCoordinateSpanMake(0.08, 0.08)
                 let region = MKCoordinateRegionMake(self.pointAnnotation.coordinate, span)
                 self.mapView.setRegion(region, animated: true)
                 
@@ -148,6 +142,8 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         let locationString = locationTextField.text!
         let linkString = linkTextField.text!
         let objectID = UdacityClient.User.ObjectId
+        
+        loadingWheel.hidden = false
         loadingWheel.startAnimating()
         
         if linkString == "" {
@@ -185,6 +181,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         locationTextField.hidden = false
         submitButton.hidden = true
         linkTextField.hidden = true
+        loadingWheel.hidden = true
     }
 
     func secondView() {

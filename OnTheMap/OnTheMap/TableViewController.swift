@@ -43,10 +43,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                     self.tableView.reloadData()
                 }
             } else {
-                //stop loading animation
                 self.loadingWheel.stopAnimating()
-
-                
                 self.launchAlertController(error!)
             }
         }

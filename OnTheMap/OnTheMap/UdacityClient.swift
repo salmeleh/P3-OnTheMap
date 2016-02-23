@@ -39,12 +39,8 @@ class UdacityClient : NSObject {
                 completionHandler(success: false, error: "Connection Error")
                 return
             }
-            guard let data = data else {
-                completionHandler(success: false, error: "No data returned by request")
-                return
-            }
-
-            UdacityClient.parseJSONForPostMethod(data, completionHandler: completionHandler)
+            
+            UdacityClient.parseJSONForPostMethod(data!, completionHandler: completionHandler)
         }
         
         task.resume()
@@ -99,8 +95,7 @@ class UdacityClient : NSObject {
         }
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
-            
-            if error != nil {
+            if error != nil && data != nil {
                 return
             }
             let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5))
