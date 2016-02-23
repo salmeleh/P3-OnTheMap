@@ -26,7 +26,9 @@ class ParseClient : NSObject {
     
     //MARK: taskForGetMethod
     func getStudentLocations(completionHandler: (result: [StudentInfo]?, error: String?) -> Void) {
-        let urlString = ParseClient.Constants.baseSecureURL
+        let params = ["limit": 100, "order": "-updatedAt"]
+        let urlString = ParseClient.Constants.baseSecureURL + ParseClient.escapedParameters(params)
+        
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
@@ -54,7 +56,7 @@ class ParseClient : NSObject {
     
     
     //MARK: taskForPostMethod
-    func postStudentLocation(mapString: String, mediaURL: String, completionHandler: (success: Bool) -> Void) {
+    func postStudentLocation(mapString: String, mediaURL: String, completionHandler: (success: Bool, error: String) -> Void) {
         print("taskForPostMethod init")
         print("UniqueKey: " + UdacityClient.User.UniqueKey!)
         
@@ -72,12 +74,14 @@ class ParseClient : NSObject {
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil {
-                completionHandler(success: false)
+            
+            if error == nil {
+                completionHandler(success: false, error: String(error))
+                return
             }
             print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
             print("post succeeded")
-            completionHandler(success: true)
+            completionHandler(success: true, error: "")
         }
         task.resume()
     }
@@ -85,7 +89,7 @@ class ParseClient : NSObject {
     
     
     //MARK: taskForPutMethod
-    func putStudentLocation(objectId: String, mapString: String, mediaURL: String, completionHandler: (success: Bool) -> Void) {
+    func putStudentLocation(objectId: String, mapString: String, mediaURL: String, completionHandler: (success: Bool, error: String) -> Void) {
         print("taskForPutMethod init")
 
         let urlString = "\(ParseClient.Constants.baseSecureURL)/\(objectId)"
@@ -100,11 +104,11 @@ class ParseClient : NSObject {
         
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil {
-                completionHandler(success: false)
-                print(error)
+            if error == nil {
+                completionHandler(success: false, error: String(error))
+                return
             } else {
-                completionHandler(success: true)
+                completionHandler(success: true, error: "")
                 print("put succeeded")
             }
         }

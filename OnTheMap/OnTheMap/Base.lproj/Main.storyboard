@@ -325,7 +325,7 @@
         <!--Posting View Controller-->
         <scene sceneID="Nyc-bL-G4H">
             <objects>
-                <viewController id="GIL-Sf-q4z" customClass="PostingViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PostingViewController" id="GIL-Sf-q4z" customClass="PostingViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3d7-A6-luS"/>
                         <viewControllerLayoutGuide type="bottom" id="8Cp-D1-qY3"/>

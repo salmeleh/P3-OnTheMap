@@ -12,7 +12,6 @@ import MapKit
 class MapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
-    var studentLocations: [StudentInfo] = []
     var annotations = [MKPointAnnotation]()
     @IBOutlet weak var loadingWheel: UIActivityIndicatorView!
     
@@ -39,7 +38,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     self.loadingWheel.stopAnimating()
                     
                     
-                    self.studentLocations = result!
+                    Students.sharedInstance().students = result!
                     self.generateAnnotations()
                     self.mapView.addAnnotations(self.annotations)
                 }
@@ -54,7 +53,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func generateAnnotations() {
-        for dictionary in studentLocations {
+        for dictionary in Students.sharedInstance().students {
             let lat = CLLocationDegrees(dictionary.latitude as Double)
             let long = CLLocationDegrees(dictionary.longitude as Double)
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
@@ -78,32 +77,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func logoutButtonPressed(sender: AnyObject) {
         loadingWheel.startAnimating()
+        UdacityClient.sharedInstance().logout(handlerForLogout)
+        self.loadingWheel.stopAnimating()
         
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-        request.HTTPMethod = "DELETE"
-        var xsrfCookie: NSHTTPCookie? = nil
-        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-        for cookie in sharedCookieStorage.cookies! {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
-        
-        }
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            self.loadingWheel.stopAnimating()
-            
-            if error != nil { // Handle error...
-                print("logoutButtonPressed error")
-                return
-            }
-            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5)) /* subset response data! */
-            print(NSString(data: newData, encoding: NSUTF8StringEncoding)!)
-        }
-        
-        
-        task.resume()
         
         dispatch_async(dispatch_get_main_queue(), {
             //return to login
@@ -111,8 +87,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             self.presentViewController(controller, animated: true, completion: nil)
         })
         
-        
     }
+    
+    
+    func handlerForLogout(success: Bool, message: String, error: String){
+        if success {
+            return
+        } else {
+            launchAlertController(error)
+        }
+    }
+    
     
     
     

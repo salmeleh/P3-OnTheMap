@@ -84,9 +84,35 @@ class UdacityClient : NSObject {
     }
     
     
-    //func logout(completionHandler: ((success: Bool, message: String, error: NSError?) -> Void)) {
-    //
-    //}
+    func logout(completionHandler: ((success: Bool, message: String, error: String) -> Void)) {
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
+        request.HTTPMethod = "DELETE"
+        var xsrfCookie: NSHTTPCookie? = nil
+        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+        for cookie in sharedCookieStorage.cookies! {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+            
+        }
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            
+            if error != nil {
+                return
+            }
+            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5))
+            print(NSString(data: newData, encoding: NSUTF8StringEncoding))
+        }
+        
+        
+        task.resume()
+
+        
+        
+    }
     
     
     
@@ -95,10 +121,18 @@ class UdacityClient : NSObject {
         let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
         var parsedResponse = try! NSJSONSerialization.JSONObjectWithData(newData, options: NSJSONReadingOptions.AllowFragments) as! [String:AnyObject]
 
+        let error = parsedResponse["error"] as? String
+        if parsedResponse["error"] != nil {
+            completionHandler(success: false, error: error!)
+            return
+        }
+        
         guard let accountDictionary = parsedResponse["account"] as? NSDictionary else {
             print("Cannot find keys 'account' in \(parsedResponse)")
             return
         }
+        
+        
         
         let registered = accountDictionary ["registered"] as? Int
         let user = accountDictionary ["key"] as? String

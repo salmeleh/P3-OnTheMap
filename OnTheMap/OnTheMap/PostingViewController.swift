@@ -71,28 +71,27 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
     
     
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     @IBAction func cancelButtonPressed(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     
     @IBAction func findButtonPressed(sender: AnyObject) {
-        secondView()
+        
         
         if locationTextField.text == "" {
             launchAlertController("Please enter a location")
+            
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("PostingViewController")
+            self.presentViewController(controller, animated: true, completion: nil)
+            
         } else {
-            //hide keyboard?
-            
-            
             mapCode(handlerForMapCode)
+            secondView()
         }
     }
+    
+//    Correct your flow in this view: only change the view to get the URL if the geocoding is successfully done. Only dismiss this view if the posting is successfully done.
     
     
     
@@ -108,6 +107,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
             if localSearchResponse == nil{
                 completionHandler(success: false, message: "Mapcode Failed", error: nil)
                 return
+                
             } else {
                 self.pointAnnotation = MKPointAnnotation()
                 self.pointAnnotation.title = self.locationTextField.text
@@ -116,7 +116,10 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
                 UdacityClient.User.Longitude = localSearchResponse!.boundingRegion.center.longitude
                 self.pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: UdacityClient.User.Latitude!, longitude: UdacityClient.User.Longitude!)
 
-
+                let span = MKCoordinateSpanMake(0.1, 0.1)
+                let region = MKCoordinateRegionMake(self.pointAnnotation.coordinate, span)
+                self.mapView.setRegion(region, animated: true)
+                
                 self.pinAnnotationView = MKPinAnnotationView(annotation: self.pointAnnotation, reuseIdentifier: nil)
                 self.mapView.addAnnotation(self.pinAnnotationView.annotation!)
                 
@@ -162,12 +165,12 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
     
     
     
-    func handlerForSubmit(success: Bool) -> Void {
+    func handlerForSubmit(success: Bool, error: String) -> Void {
         if success {
             dismissViewControllerAnimated(true, completion: nil)
         }
         else {
-            launchAlertController("Posting failed")
+            launchAlertController(error)
         }
     }
     
@@ -193,11 +196,6 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         submitButton.hidden = false
         linkTextField.hidden = false
     }
-    
-    func thirdView() {
-        
-    }
-    
     
     
     
