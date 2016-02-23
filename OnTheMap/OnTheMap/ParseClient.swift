@@ -27,10 +27,18 @@ class ParseClient : NSObject {
     //MARK: taskForGetMethod
     func getStudentLocations(completionHandler: (result: [StudentInfo]?, error: String?) -> Void) {
         let urlString = ParseClient.Constants.baseSecureURL
+        
+        
+//        //      It looks like you are getting data directly from the server and not sorting them accordingly.
+//        You could use .sort method with your array. But you can also get data already sorted from the server.
+//            
+//        Option to load the correct data order:
 //        
-//        let params: [String : AnyObject]
-//        params = ["limit": 100, "order": "-updatedAt"]
-//        let urlString = ParseClient.Constants.baseSecureURL + escapedParameters(params)
+//        let BASE_URL = "https://api.parse.com/1/classes/StudentLocation"
+//        let params = ["limit": 100, "order": "-updatedAt"]
+//        let urlString = BASE_URL + escapedParameters(params)
+//        Notice that you need to use -updatedAt.
+        
         
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
