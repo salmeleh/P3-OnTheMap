@@ -27,6 +27,11 @@ class ParseClient : NSObject {
     //MARK: taskForGetMethod
     func getStudentLocations(completionHandler: (result: [StudentInfo]?, error: String?) -> Void) {
         let urlString = ParseClient.Constants.baseSecureURL
+//        
+//        let params: [String : AnyObject]
+//        params = ["limit": 100, "order": "-updatedAt"]
+//        let urlString = ParseClient.Constants.baseSecureURL + escapedParameters(params)
+        
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         request.addValue(ParseClient.Constants.applicationID, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(ParseClient.Constants.APIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")

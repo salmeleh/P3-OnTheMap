@@ -9,8 +9,6 @@
 import UIKit
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
-
-    var studentInfo: [StudentInfo] = []
     
     @IBOutlet var tableView: UITableView!
     
@@ -39,9 +37,9 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         ParseClient.sharedInstance().getStudentLocations() { (result, error) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.loadingWheel.stopAnimating()
+                    Students.sharedInstance().students = result!
                     
-                    self.studentInfo = result!
+                    self.loadingWheel.stopAnimating()
                     self.tableView.reloadData()
                 }
             } else {
@@ -56,8 +54,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        let studentData = studentInfo[indexPath.row]
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let studentData = Students.sharedInstance().students[indexPath.row]
         let studentURL = studentData.mediaURL
         UIApplication.sharedApplication().openURL(NSURL(string: "\(studentURL)")!)        
     }
@@ -69,7 +67,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         let cellReuseIdentifier = "studentInfoCell"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as UITableViewCell!
         
-        let studentData = studentInfo[indexPath.row]
+        let studentData = Students.sharedInstance().students[indexPath.row]
 
         cell.textLabel!.text = studentData.firstName + " " + studentData.lastName
         cell.detailTextLabel!.text = studentData.mediaURL
@@ -80,7 +78,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return studentInfo.count
+            return Students.sharedInstance().students.count
     }
     
     
@@ -103,10 +101,10 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         let task = session.dataTaskWithRequest(request) { data, response, error in
             self.loadingWheel.stopAnimating()
             
-            if error != nil { // Handle error...
-            return
+            if error != nil {
+                return
             }
-            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5)) /* subset response data! */
+            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5))
             print(NSString(data: newData, encoding: NSUTF8StringEncoding))
         }
         
