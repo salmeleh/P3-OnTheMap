@@ -13,7 +13,7 @@ extension ParseClient {
     //MARK: Constants
     struct Constants {
         static let applicationID: String = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
-        static let APIKey: String = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
+        static let APIKey: String = "opsfkopwfjewofj0hfwiejkn"
         static let baseSecureURL: String = "https://api.parse.com/1/classes/StudentLocation"
     }
     
