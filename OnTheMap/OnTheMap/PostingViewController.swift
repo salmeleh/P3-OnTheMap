@@ -83,12 +83,12 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
             
         } else {
             mapCode(handlerForMapCode)
-            secondView()
+            //secondView()
         }
     }
     
     
-    func mapCode (completionHandler: ((success: Bool, message: String, error: String?) -> Void)) {
+    func mapCode (completionHandler: ((success: Bool, error: String) -> Void)) {
         loadingWheel.hidden = false
         loadingWheel.startAnimating()
 
@@ -99,8 +99,8 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         
         search.startWithCompletionHandler { (localSearchResponse, error) -> Void in
             if localSearchResponse == nil{
-                completionHandler(success: false, message: "Mapcode Failed", error: nil)
-                return
+                completionHandler(success: false, error: "Mapcode Failed")
+                //return
                 
             } else {
                 self.pointAnnotation = MKPointAnnotation()
@@ -118,19 +118,23 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
                 self.mapView.addAnnotation(self.pinAnnotationView.annotation!)
                 
                 self.loadingWheel.stopAnimating()
-                completionHandler(success: true, message: "Successful", error: nil)
+                completionHandler(success: true, error: "")
+                self.secondView()
             }
         }
     }
     
     
     
-    func handlerForMapCode(success: Bool, message: String, error: String?) -> Void {
+    func handlerForMapCode(success: Bool, error: String) -> Void {
         if success {
-            return
+            //return
         }
         else {
-            launchAlertController(message)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.launchAlertController(error)
+                self.loadingWheel.stopAnimating()
+            })
         }
         
     }
@@ -166,7 +170,10 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
             dismissViewControllerAnimated(true, completion: nil)
         }
         else {
-            launchAlertController(error)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.launchAlertController(error)
+                self.loadingWheel.stopAnimating()
+            })
         }
     }
     
@@ -216,7 +223,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         let alertController = UIAlertController(title: "", message: error, preferredStyle: .Alert)
         
         let OKAction = UIAlertAction(title: "Dismiss", style: .Default) { (action) in
-            self.dismissViewControllerAnimated(true, completion: nil)
+            //self.dismissViewControllerAnimated(true, completion: nil)
         }
         alertController.addAction(OKAction)
         

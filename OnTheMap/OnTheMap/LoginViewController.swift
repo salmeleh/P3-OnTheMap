@@ -82,7 +82,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let alertController = UIAlertController(title: "", message: error, preferredStyle: .Alert)
         
         let OKAction = UIAlertAction(title: "Dismiss", style: .Default) { (action) in
-            self.dismissViewControllerAnimated(true, completion: nil)
+            //self.dismissViewControllerAnimated(true, completion: nil)
         }
         alertController.addAction(OKAction)
         
