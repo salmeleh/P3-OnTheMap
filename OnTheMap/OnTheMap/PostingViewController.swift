@@ -38,8 +38,6 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
     var keyboardAdjusted = false
     var lastKeyboardOffset : CGFloat = 0.0
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -49,7 +47,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         locationTextField.delegate = self
         linkTextField.delegate = self
         
-        
+        loadingWheel.hidesWhenStopped = true
         initialView()
     }
     
@@ -89,11 +87,9 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         }
     }
     
-//    Correct your flow in this view: only change the view to get the URL if the geocoding is successfully done. Only dismiss this view if the posting is successfully done.
-    
-    
     
     func mapCode (completionHandler: ((success: Bool, message: String, error: String?) -> Void)) {
+        loadingWheel.hidden = false
         loadingWheel.startAnimating()
 
         
@@ -185,6 +181,7 @@ class PostingViewController: UIViewController, MKMapViewDelegate, UITextFieldDel
         locationTextField.hidden = false
         submitButton.hidden = true
         linkTextField.hidden = true
+        loadingWheel.hidden = true
     }
 
     func secondView() {
