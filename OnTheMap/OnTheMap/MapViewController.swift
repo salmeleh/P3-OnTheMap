@@ -12,7 +12,6 @@ import MapKit
 class MapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
-    var studentLocations: [StudentInfo] = []
     var annotations = [MKPointAnnotation]()
     @IBOutlet weak var loadingWheel: UIActivityIndicatorView!
     
@@ -39,7 +38,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     self.loadingWheel.stopAnimating()
                     
                     
-                    self.studentLocations = result!
+                    Students.sharedInstance().students = result!
                     self.generateAnnotations()
                     self.mapView.addAnnotations(self.annotations)
                 }
@@ -54,7 +53,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func generateAnnotations() {
-        for dictionary in studentLocations {
+        for dictionary in Students.sharedInstance().students {
             let lat = CLLocationDegrees(dictionary.latitude as Double)
             let long = CLLocationDegrees(dictionary.longitude as Double)
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
@@ -94,11 +93,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let task = session.dataTaskWithRequest(request) { data, response, error in
             self.loadingWheel.stopAnimating()
             
-            if error != nil { // Handle error...
+            if error != nil {
                 print("logoutButtonPressed error")
                 return
             }
-            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5)) /* subset response data! */
+            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5))
             print(NSString(data: newData, encoding: NSUTF8StringEncoding)!)
         }
         
